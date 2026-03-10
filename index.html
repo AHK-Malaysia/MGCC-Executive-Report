@@ -3,12 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MGCC ED Report Q4 2025</title>
+<title>MGCC ED Reports – 2024 & 2025</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
   :root { --blue:#003366;--accent:#E8A020;--light:#f4f7fb;--mid:#dde6f0;--text:#1a1a2e;--green:#2eab6f; }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Inter',sans-serif;background:var(--light);color:var(--text);line-height:1.7;overflow-x:hidden;}
+
+  /* YEAR SELECTOR */
+  .y-selector{background:#050d1a;display:flex;justify-content:center;gap:10px;padding:16px 16px 12px;flex-wrap:wrap;}
+  .y-selector button{background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;padding:12px 36px;cursor:pointer;white-space:nowrap;border-radius:12px;transition:all 0.25s;}
+  .y-selector button:hover{color:white;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);}
+  .y-selector button.active{color:white;background:linear-gradient(135deg,#003366,#005599);border-color:#0077cc;}
+  .year-view{display:none;}
+  .year-view.active{display:block;}
+
+  /* QUARTER SELECTOR */
+  .q-selector{background:#0a1628;display:flex;justify-content:center;gap:8px;padding:14px 16px;flex-wrap:wrap;border-bottom:3px solid var(--accent);}
+  .q-selector button{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;cursor:pointer;white-space:nowrap;border-radius:10px;transition:all 0.25s;}
+  .q-selector button:hover{color:white;background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.3);}
+  .q-selector button.active{color:#0a1628;background:var(--accent);border-color:var(--accent);}
+
+  /* QUARTER WRAPPER */
+  .quarter-view{display:none;}
+  .quarter-view.active{display:block;}
 
   /* NAV */
   nav{position:sticky;top:0;z-index:100;background:var(--blue);display:flex;justify-content:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding:10px 16px;flex-wrap:wrap;}
@@ -45,13 +63,11 @@
   .section.active{display:block;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-  /* SECTION HEADER */
   .section-header{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
   .section-icon{width:48px;height:48px;background:var(--blue);color:white;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
   .section-header h2{font-size:1.5rem;font-weight:900;color:var(--blue);}
   .section-header .section-sub{font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:1px;}
 
-  /* CARDS */
   .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-bottom:24px;}
   .card{background:white;border-radius:14px;padding:22px;box-shadow:0 2px 12px rgba(0,51,102,0.07);border-top:4px solid var(--blue);transition:transform 0.2s,box-shadow 0.2s;cursor:default;}
   .card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,51,102,0.13);}
@@ -62,31 +78,11 @@
   .card p{font-size:0.875rem;color:#555;}
   .win{display:inline-flex;align-items:center;gap:6px;background:#e8f5ee;color:#1a7a47;font-size:0.78rem;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:8px;}
 
-  /* HIGHLIGHT BOX */
   .highlight-box{background:linear-gradient(135deg,#003366,#005599);color:white;border-radius:16px;padding:28px 32px;margin:20px 0;position:relative;overflow:hidden;}
   .highlight-box::after{content:'"';position:absolute;right:20px;top:-10px;font-size:8rem;color:rgba(255,255,255,0.06);font-family:Georgia,serif;}
   .highlight-box h3{font-size:1rem;color:var(--accent);margin-bottom:8px;}
   .highlight-box p{font-size:0.875rem;opacity:0.9;}
 
-  /* TABS */
-  .tab-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
-  .tab-btn{background:white;border:2px solid var(--mid);border-radius:20px;color:#666;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:600;padding:6px 16px;cursor:pointer;transition:all 0.2s;}
-  .tab-btn:hover{border-color:var(--blue);color:var(--blue);}
-  .tab-btn.active{background:var(--blue);border-color:var(--blue);color:white;}
-  .tab-panel{display:none;}
-  .tab-panel.active{display:block;animation:fadeIn 0.25s ease;}
-
-  /* ACCORDION */
-  .accordion{margin-bottom:12px;}
-  .acc-header{background:white;border:none;width:100%;text-align:left;padding:16px 20px;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;color:var(--blue);cursor:pointer;border-radius:12px;box-shadow:0 2px 8px rgba(0,51,102,0.07);display:flex;justify-content:space-between;align-items:center;transition:background 0.2s;}
-  .acc-header:hover{background:#f0f5ff;}
-  .acc-header.open{border-radius:12px 12px 0 0;background:#f0f5ff;}
-  .acc-arrow{transition:transform 0.3s;font-size:0.8rem;color:var(--accent);}
-  .acc-header.open .acc-arrow{transform:rotate(180deg);}
-  .acc-body{background:white;border-radius:0 0 12px 12px;padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;font-size:0.875rem;color:#555;box-shadow:0 4px 8px rgba(0,51,102,0.06);}
-  .acc-body.open{padding:16px 20px 20px;max-height:600px;}
-
-  /* FAIR CHART */
   .chart-wrap{background:white;border-radius:14px;padding:24px;box-shadow:0 2px 12px rgba(0,51,102,0.07);margin-bottom:20px;}
   .chart-wrap h3{font-size:0.9rem;font-weight:700;color:var(--blue);margin-bottom:18px;}
   .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
@@ -95,17 +91,13 @@
   .bar-fill{height:100%;border-radius:20px;display:flex;align-items:center;padding-left:10px;font-size:0.72rem;font-weight:700;color:white;width:0;transition:width 1s cubic-bezier(.4,0,.2,1);}
   .bar-val{font-size:0.8rem;font-weight:700;color:var(--blue);width:50px;}
 
-  /* EP TABLE */
   .ep-table{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,51,102,0.07);margin-bottom:20px;}
   .ep-table table{width:100%;border-collapse:collapse;}
   .ep-table th{background:var(--blue);color:white;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.8px;padding:12px 16px;text-align:left;}
   .ep-table td{padding:13px 16px;font-size:0.875rem;border-bottom:1px solid var(--mid);}
   .ep-table tr:last-child td{border-bottom:none;}
   .ep-table tr:hover td{background:#f9fbff;}
-  .old{color:#bbb;text-decoration:line-through;}
-  .new{color:#003366;font-weight:700;}
 
-  /* TIMELINE */
   .timeline{position:relative;padding-left:28px;}
   .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--mid);}
   .t-item{position:relative;margin-bottom:14px;background:white;border-radius:10px;padding:14px 18px;box-shadow:0 1px 6px rgba(0,51,102,0.06);cursor:pointer;transition:box-shadow 0.2s;}
@@ -117,18 +109,15 @@
   .t-detail{font-size:0.82rem;color:#444;margin-top:10px;padding-top:10px;border-top:1px solid var(--mid);display:none;}
   .t-item.open .t-detail{display:block;}
 
-  /* HR */
   .hr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
   .hr-card{background:white;border-radius:12px;padding:20px;text-align:center;box-shadow:0 2px 10px rgba(0,51,102,0.07);}
   .hr-card .big{font-size:2.4rem;font-weight:900;color:var(--blue);}
   .hr-card .sub{font-size:0.75rem;color:#888;margin-top:4px;}
 
-  /* MEMBER */
   .member-chip{display:inline-block;background:white;border:1.5px solid var(--mid);border-radius:8px;padding:7px 14px;font-size:0.82rem;color:var(--blue);font-weight:600;margin:5px;box-shadow:0 1px 4px rgba(0,51,102,0.06);transition:transform 0.2s,box-shadow 0.2s;cursor:default;}
   .member-chip:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,51,102,0.1);}
   .member-chip.premium{border-color:var(--accent);color:#7a4500;background:#fff8ee;}
 
-  /* PROGRESS */
   .progress-row{margin-bottom:16px;}
   .progress-label{display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:6px;}
   .progress-label span:first-child{font-weight:600;color:var(--blue);}
@@ -138,16 +127,992 @@
   .progress-fill.accent{background:linear-gradient(90deg,var(--accent),#f0b030);}
   .progress-fill.green{background:linear-gradient(90deg,var(--green),#40c870);}
 
+  .accordion{margin-bottom:12px;}
+  .acc-header{background:white;border:none;width:100%;text-align:left;padding:16px 20px;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;color:var(--blue);cursor:pointer;border-radius:12px;box-shadow:0 2px 8px rgba(0,51,102,0.07);display:flex;justify-content:space-between;align-items:center;transition:background 0.2s;}
+  .acc-header:hover{background:#f0f5ff;}
+  .acc-header.open{border-radius:12px 12px 0 0;background:#f0f5ff;}
+  .acc-arrow{transition:transform 0.3s;font-size:0.8rem;color:var(--accent);}
+  .acc-header.open .acc-arrow{transform:rotate(180deg);}
+  .acc-body{background:white;border-radius:0 0 12px 12px;padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;font-size:0.875rem;color:#555;box-shadow:0 4px 8px rgba(0,51,102,0.06);}
+  .acc-body.open{padding:16px 20px 20px;max-height:600px;}
 
-
-  /* FOOTER */
   footer{background:var(--blue);color:rgba(255,255,255,0.6);text-align:center;padding:24px;font-size:0.78rem;margin-top:0;}
   footer strong{color:white;}
 </style>
 </head>
 <body>
 
-<!-- HERO -->
+<!-- YEAR SELECTOR -->
+<div class="y-selector">
+  <button class="active" onclick="showYear('y2024',this)">2024</button>
+  <button onclick="showYear('y2025',this)">2025</button>
+</div>
+
+<!-- ################################################################ -->
+<!-- 2024 -->
+<!-- ################################################################ -->
+<div id="y2024" class="year-view active">
+
+<div class="q-selector" id="q-selector-2024">
+  <button class="active" onclick="showQuarter('q1','q-selector-2024',this)">Q1 · Jan–Mar</button>
+  <button onclick="showQuarter('q2','q-selector-2024',this)">Q2 · Apr–Jun</button>
+  <button onclick="showQuarter('q3','q-selector-2024',this)">Q3 · Jul–Sep</button>
+  <button onclick="showQuarter('q4','q-selector-2024',this)">Q4 · Oct–Dec</button>
+</div>
+
+<!-- Q1 2024 -->
+<div id="q1" class="quarter-view active">
+
+<div class="hero">
+  <div class="tag">Q1 2024 · Jan – Mar</div>
+  <h1>MGCC Acting Executive<br><span>Director's Report</span></h1>
+  <p>Malaysian-German Chamber of Commerce and Industry</p>
+  <div class="meta">
+    <div class="meta-item"><strong>9 May 2024</strong>Board Meeting · KL</div>
+    <div class="meta-item"><strong>29</strong>Team Members</div>
+    <div class="meta-item"><strong>433</strong>Total Members</div>
+    <div class="meta-item"><strong>10</strong>Events Held</div>
+  </div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-item"><div class="stat-tooltip">45 completed visa cases</div><div class="num">+125%</div><div class="label">Visa Growth</div></div>
+  <div class="stat-item"><div class="stat-tooltip">GDP growth expected 5% for 2024</div><div class="num">5.0%</div><div class="label">GDP Forecast</div></div>
+  <div class="stat-item"><div class="stat-tooltip">18 new, 11 resignations</div><div class="num">+7</div><div class="label">Net Members</div></div>
+  <div class="stat-item"><div class="stat-tooltip">RM102,997 PR value</div><div class="num">+15%</div><div class="label">PR Value YoY</div></div>
+  <div class="stat-item"><div class="stat-tooltip">10 events, 482 participants</div><div class="num">482</div><div class="label">Participants</div></div>
+  <div class="stat-item"><div class="stat-tooltip">30 Premium Members – new record</div><div class="num">30</div><div class="label">Premium Members</div></div>
+</div>
+
+<nav>
+  <button class="active" onclick="showSection('q1','q1-overview',this)">📊 Overview</button>
+  <button onclick="showSection('q1','q1-services',this)">🛂 Services</button>
+  <button onclick="showSection('q1','q1-fairs',this)">🎪 Trade Fairs</button>
+  <button onclick="showSection('q1','q1-delegations',this)">🤝 Delegations</button>
+  <button onclick="showSection('q1','q1-vet',this)">🎓 VET</button>
+  <button onclick="showSection('q1','q1-chamber',this)">🏛️ Chamber</button>
+  <button onclick="showSection('q1','q1-accounts',this)">💼 Accounts</button>
+  <button onclick="showSection('q1','q1-hr',this)">👥 HR & IT</button>
+</nav>
+
+<div id="q1-overview" class="section active">
+  <div class="section-header"><div class="section-icon">📊</div><div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🇲🇾</div><h3>Economy Accelerating</h3><p>Malaysia's economy continues to develop positively, driven by robust private consumption (60% of GDP). Analysts expect 5% GDP growth for 2024 vs 3.7% in 2023.</p><span class="win">✓ Labour market positive</span></div>
+    <div class="card accent"><div class="ci">🤝</div><h3>Top ASEAN Partner</h3><p>Malaysia remains Germany's most important trading partner within ASEAN. Almost 50% of goods sourced are electronic products, primarily semiconductors.</p></div>
+    <div class="card green"><div class="ci">📦</div><h3>Sourcing Hotspot</h3><p>Malaysia is increasingly important as a sourcing location and trading hub with two of the world's largest seaports. Highest supplier count in the 3rd Purchase Initiative SEA.</p></div>
+  </div>
+  <div class="highlight-box"><h3>⚠️ Key Developments</h3><p>Visit of Germany's Foreign Minister Ms Baerbock (Jan 12) · SST increase to 8% effective 1 March · PM Anwar's visit to Germany (11-15 March) with CEO roundtable in Berlin · MGCC invited to MIDA investment facilitation centre.</p></div>
+  <div class="highlight-box" style="background:linear-gradient(135deg,#2a6e47,#1a8a55);"><h3>🏛️ Leadership Transition</h3><p>Executive Director Daniel Bernbeck departed after 8+ years. Dr Eva Langerbeck took over as Acting ED. Incoming ED Jan Noether was chosen by the Board in March 2024.</p></div>
+</div>
+
+<div id="q1-services" class="section">
+  <div class="section-header"><div class="section-icon">🛂</div><div><div class="section-sub">Section C · Corporate Services</div><h2>Visa & Corporate Services</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>45 Completed Visa Cases</h3><p>A 125% increase compared to Q1 2023. Employment passes, dependant passes, professional visit passes, residence passes, digital nomad pass, appeals and follow-ups.</p><span class="win">✓ +125% vs Q1 2023</span></div>
+    <div class="card accent"><div class="ci">📜</div><h3>Licence Applications</h3><p>19 ongoing and 7 newly approved cases. Other services: translations, location analyses, certifications, customs assistance, compliance support.</p></div>
+  </div>
+  <div class="chart-wrap"><h3>Case Distribution (Total: 107 current cases)</h3>
+    <div class="bar-row"><div class="bar-label">Visa</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="55">55%</div></div><div class="bar-val">55%</div></div>
+    <div class="bar-row"><div class="bar-label">Licences</div><div class="bar-track"><div class="bar-fill" style="background:#005599" data-w="16">16%</div></div><div class="bar-val">16%</div></div>
+    <div class="bar-row"><div class="bar-label">Internal Cases</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="17">17%</div></div><div class="bar-val">17%</div></div>
+    <div class="bar-row"><div class="bar-label">Translations & Certs</div><div class="bar-track"><div class="bar-fill" style="background:#2eab6f" data-w="6">6%</div></div><div class="bar-val">6%</div></div>
+  </div>
+</div>
+
+<div id="q1-fairs" class="section">
+  <div class="section-header"><div class="section-icon">🎪</div><div><div class="section-sub">Section C · Services</div><h2>Trade Fairs</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🏟️</div><h3>2 Major German Trade Fairs</h3><p>MGCC continues to represent 2 major German trade fairs and sold tickets to Malaysian participants for 5 different German trade fairs in Q1.</p></div>
+  </div>
+</div>
+
+<div id="q1-delegations" class="section">
+  <div class="section-header"><div class="section-icon">🤝</div><div><div class="section-sub">Section C · Services</div><h2>Delegations & Projects</h2></div></div>
+  <div class="timeline">
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">Jan – Mar</div><h4>🛒 3rd Purchase Initiative SEA (Preparation) <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Malaysia registered the highest number of suppliers out of all SEA countries.</p><div class="t-detail">Prepared together with Vietnam, Thailand, Laos and Cambodia. Event scheduled for Q2.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">Q1</div><h4>🎓 German Career Day at APU <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>7 German companies participated including Schott IT and Commerz Trade Services.</p><div class="t-detail">Planned to develop such career days into a regular format to assist MGCC's members with recruiting talents.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">Q1</div><h4>🇩🇪 Bavarian Ministry Fact-Finding <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>MGCC assisted the Bavarian Ministry of Economics in a fact-finding mission to decide on SEA representation office location.</p><div class="t-detail">Part of broader German state-level engagement with Malaysia's growing economic role in Southeast Asia.</div></div>
+  </div>
+</div>
+
+<div id="q1-vet" class="section">
+  <div class="section-header"><div class="section-icon">🎓</div><div><div class="section-sub">Section E · GDVT</div><h2>VET: Training Excellence</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📝</div><h3>Final Examinations — 64 Apprentices</h3><p>Mechatronics 2020 and 2022 intakes. 28 completing 3.5 years; 36 continuing for Advanced Skills Diploma. Companies: B. Braun, Bosch, Osram, Ciba Vision, BBS Automation, BAUER, Koerber.</p></div>
+    <div class="card accent"><div class="ci">🎖️</div><h3>AdA Full Version Workshop</h3><p>Train-the-Trainer International Full Version Training in Penang. 7 participants will continue to the Industriemeister Mechatronics intake of 2024.</p></div>
+    <div class="card green"><div class="ci">🏛️</div><h3>GMI Industry Advisory Summit</h3><p>Officiated by DPM Dato' Seri Dr. Ahmad Zahid. MGCC delivered opening speech on TVET in Germany and moderated the "Malaysian Landscape Towards Professional TVET" dialogue.</p></div>
+  </div>
+</div>
+
+<div id="q1-chamber" class="section">
+  <div class="section-header"><div class="section-icon">🏛️</div><div><div class="section-sub">Section F · Communications</div><h2>Chamber: Record Growth</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📈</div><h3>Total Members: 433</h3><p>18 new applications (incl. 3 Premium) and 11 resignations. Near historical high of Dec 2023. 30 Premium Members — a new record!</p><span class="win">✓ Net +7</span></div>
+    <div class="card accent"><div class="ci">🎉</div><h3>10 Events · 482 Participants</h3><p>New Year's Reception (140 guests, +15% vs 2023), Sundowner with farewell for outgoing ED (~120 participants), InterChamber Ladies Sundowner, 3 Tuesday Clubs.</p></div>
+  </div>
+  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:4px 0 12px;">Notable New Members</p>
+  <div>
+    <span class="member-chip premium">⭐ Volkswagen Group Malaysia</span>
+    <span class="member-chip premium">⭐ Phoenix Contact Malaysia</span>
+    <span class="member-chip premium">⭐ DHL Supply Chain Malaysia</span>
+    <span class="member-chip">Sennebogen Pte Ltd</span>
+    <span class="member-chip">The RuMa Hotel KL</span>
+    <span class="member-chip">JLL Appraisal & Property Services</span>
+    <span class="member-chip">Geutebruck SEA</span>
+    <span class="member-chip">AIMS International Malaysia</span>
+  </div>
+  <div class="highlight-box" style="margin-top:20px;"><h3>📱 Social Media Highlights</h3><p>LinkedIn followers surpassed <strong>8,000</strong> in March (+327 in one month). PM Anwar's Germany visit drove the biggest social media boom. Engagement peaked at <strong>2,478</strong> in March. PR value: <strong>RM102,997</strong> (+15% vs Q1 2023).</p></div>
+</div>
+
+<div id="q1-accounts" class="section">
+  <div class="section-header"><div class="section-icon">💼</div><div><div class="section-sub">Section D · Accounts</div><h2>Accounts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>17 Total Clients</h3><p><strong>9 accounting</strong> and <strong>17 payroll</strong> clients. Q1 packed with FY2023 closing, audit by newly appointed Mazars PLT, and statutory payroll deadlines.</p></div>
+    <div class="card accent"><div class="ci">📌</div><h3>SST Increase to 8%</h3><p>Effective 1 March 2024 — implemented without disruption. Excludes F&B, telco, parking, and logistics but impacts MGCC's consultation services.</p></div>
+  </div>
+</div>
+
+<div id="q1-hr" class="section">
+  <div class="section-header"><div class="section-icon">👥</div><div><div class="section-sub">Section G · Admin & HR</div><h2>People & Operations</h2></div></div>
+  <div class="hr-grid">
+    <div class="hr-card"><div class="big">29</div><div class="sub">Permanent Employees</div></div>
+    <div class="hr-card"><div class="big">3</div><div class="sub">Promotions</div></div>
+    <div class="hr-card"><div class="big">3</div><div class="sub">Interns</div></div>
+    <div class="hr-card"><div class="big">4.5%</div><div class="sub">Annual Increment</div></div>
+  </div>
+  <div class="card-grid">
+    <div class="card green"><div class="ci">🟢</div><h3>New Joiner</h3><p><strong>Amanda How</strong> — Manager, Markets (2 Feb, fixed-term)</p></div>
+    <div class="card accent"><div class="ci">🔴</div><h3>Leavers</h3><p><strong>Daniel Bernbeck</strong> — ED, last day 29 Feb<br><strong>Kumaran Nair</strong> — Senior Manager GDVT, last day 27 Feb<br><strong>Dr Eva Langerbeck</strong> — announced departure, effective end Jun</p></div>
+    <div class="card"><div class="ci">🛡️</div><h3>IT Updates</h3><p>Upgraded server infrastructure. HA switches for heavy network load. Replaced power distribution panels. Enhanced Adobe Creative Team subscription.</p></div>
+  </div>
+</div>
+
+</div><!-- end Q1 2024 -->
+
+
+<!-- Q2 2024 -->
+<div id="q2" class="quarter-view">
+
+<div class="hero">
+  <div class="tag">Q2 2024 · Apr – Jun</div>
+  <h1>MGCC Executive<br><span>Director's Report</span></h1>
+  <p>Malaysian-German Chamber of Commerce and Industry</p>
+  <div class="meta">
+    <div class="meta-item"><strong>23 Aug 2024</strong>Board Meeting · KL</div>
+    <div class="meta-item"><strong>30</strong>Team Members</div>
+    <div class="meta-item"><strong>437</strong>Total Members</div>
+    <div class="meta-item"><strong>10</strong>Events Held</div>
+  </div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-item"><div class="stat-tooltip">100 completed visa cases</div><div class="num">+50%</div><div class="label">Visa Growth</div></div>
+  <div class="stat-item"><div class="stat-tooltip">GDP grew 5.8% in Q2</div><div class="num">5.8%</div><div class="label">GDP Growth</div></div>
+  <div class="stat-item"><div class="stat-tooltip">Revenue up 21% vs last year</div><div class="num">+21%</div><div class="label">Revenue YoY</div></div>
+  <div class="stat-item"><div class="stat-tooltip">RM648,401 PR value (+220%)</div><div class="num">+220%</div><div class="label">PR Value YoY</div></div>
+  <div class="stat-item"><div class="stat-tooltip">6 trade fairs, 613 visitors</div><div class="num">613</div><div class="label">Fair Visitors</div></div>
+  <div class="stat-item"><div class="stat-tooltip">102 meetings, 35 DE + 32 MY cos</div><div class="num">102</div><div class="label">B2B Meetings</div></div>
+</div>
+
+<nav>
+  <button class="active" onclick="showSection('q2','q2-overview',this)">📊 Overview</button>
+  <button onclick="showSection('q2','q2-services',this)">🛂 Services</button>
+  <button onclick="showSection('q2','q2-fairs',this)">🎪 Trade Fairs</button>
+  <button onclick="showSection('q2','q2-delegations',this)">🤝 Delegations</button>
+  <button onclick="showSection('q2','q2-vet',this)">🎓 VET</button>
+  <button onclick="showSection('q2','q2-chamber',this)">🏛️ Chamber</button>
+  <button onclick="showSection('q2','q2-accounts',this)">💼 Accounts</button>
+  <button onclick="showSection('q2','q2-hr',this)">👥 HR & IT</button>
+</nav>
+
+<div id="q2-overview" class="section active">
+  <div class="section-header"><div class="section-icon">📊</div><div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">💪</div><h3>Economy Surging</h3><p>GDP grew 5.8% in Q2 — surpassing all estimates. Recovery from early 2024 is gathering speed. BNM held policy rate at 3%.</p><span class="win">✓ Beat all forecasts</span></div>
+    <div class="card accent"><div class="ci">📦</div><h3>Bilateral Trade Up</h3><p>German exports: machinery, automotive, pharmaceuticals. Malaysian exports: electronics, palm oil, rubber. Both govts working to simplify regulations.</p></div>
+    <div class="card green"><div class="ci">🏗️</div><h3>German Tech Park Malacca</h3><p>Following an MoU signed in March, the historical state is poised to become a tech hub housing high-tech companies and pushing TVET.</p></div>
+  </div>
+  <div class="highlight-box"><h3>🏛️ MGCC Situation</h3><p>Deputy ED Dr Langerbeck departed to AHK Taiwan. Successor <strong>Tara Meite</strong> joined in June. Financially healthy — surplus recorded with 21% revenue increase. Two major events: <strong>4th German-Malaysian Business Forum</strong> and <strong>33rd AGM</strong>.</p></div>
+</div>
+
+<div id="q2-services" class="section">
+  <div class="section-header"><div class="section-icon">🛂</div><div><div class="section-sub">Section C · Corporate Services</div><h2>Visa & Corporate Services</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>100 Completed Visa Cases</h3><p>By end of June 2024 — a 50% increase compared to Q2 2023. Full range of Malaysian visa types processed.</p><span class="win">✓ +50% vs Q2 2023</span></div>
+    <div class="card accent"><div class="ci">📜</div><h3>Licence Applications</h3><p>12 ongoing and 12 newly approved cases. Plus translations, location analyses, certifications, customs, and compliance support.</p></div>
+  </div>
+  <div class="chart-wrap"><h3>Case Distribution (Total: 118 current cases)</h3>
+    <div class="bar-row"><div class="bar-label">Visa</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="76">76%</div></div><div class="bar-val">76%</div></div>
+    <div class="bar-row"><div class="bar-label">Licences</div><div class="bar-track"><div class="bar-fill" style="background:#005599" data-w="10">10%</div></div><div class="bar-val">10%</div></div>
+    <div class="bar-row"><div class="bar-label">Compliance Support</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="5">5%</div></div><div class="bar-val">5%</div></div>
+    <div class="bar-row"><div class="bar-label">Other</div><div class="bar-track"><div class="bar-fill" style="background:#2eab6f" data-w="9">9%</div></div><div class="bar-val">9%</div></div>
+  </div>
+</div>
+
+<div id="q2-fairs" class="section">
+  <div class="section-header"><div class="section-icon">🎪</div><div><div class="section-sub">Section C · Services</div><h2>Trade Fairs: 613 Visitors</h2></div></div>
+  <div class="chart-wrap"><h3>Q2 Trade Fair Visitors</h3>
+    <div class="bar-row"><div class="bar-label">IFAT Munich</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="100">183</div></div><div class="bar-val">183</div></div>
+    <div class="bar-row"><div class="bar-label">transport logistic China</div><div class="bar-track"><div class="bar-fill" style="background:#005599" data-w="100">183</div></div><div class="bar-val">183</div></div>
+    <div class="bar-row"><div class="bar-label">IE expo China</div><div class="bar-track"><div class="bar-fill" style="background:#0077cc" data-w="99">181</div></div><div class="bar-val">181</div></div>
+    <div class="bar-row"><div class="bar-label">analytical 2024</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="23">42</div></div><div class="bar-val">42</div></div>
+    <div class="bar-row"><div class="bar-label">ceramitec 2024</div><div class="bar-track"><div class="bar-fill" style="background:#2eab6f" data-w="8">15</div></div><div class="bar-val">15</div></div>
+    <div class="bar-row"><div class="bar-label">Outdoor By ISPO</div><div class="bar-track"><div class="bar-fill" style="background:#7a4fcc" data-w="5">9</div></div><div class="bar-val">9</div></div>
+  </div>
+</div>
+
+<div id="q2-delegations" class="section">
+  <div class="section-header"><div class="section-icon">🤝</div><div><div class="section-sub">Section C · Services</div><h2>Delegations & Projects</h2></div></div>
+  <div class="timeline">
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">Apr – May</div><h4>🛒 3rd Purchase Initiative SEA <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>35 German + 32 Malaysian companies. 102 virtual meetings organised.</p><div class="t-detail">In cooperation with BME. Spread over 3 weeks. Malaysian companies prepared to supply to Germany across various sectors.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">3–5 July</div><h4>🎓 Education & Training MEP <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>9 German companies, ~90 participants, visit to GMI, ~60 individual meetings.</p><div class="t-detail">Under BMWK framework. Included introductory briefing with GTAI, full-day conference, roundtable with MoHR authorities, and intercultural programme.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">9–11 July</div><h4>⚙️ VDW Tool Builders Delegation <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>8 German companies, 100 participants at symposium, 48 individual meetings.</p><div class="t-detail">Site visits to Kum Hoi Engineering and Airfoil factory. Deepened understanding of the Malaysian market for machine tools.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">16 July</div><h4>♻️ German RETech Workshop <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Waste Management & Recycling Technologies workshop for public and private sector.</p><div class="t-detail">Based on the German model of circular economy and EPR. German experts presented strategies and guidelines for the Malaysian market.</div></div>
+  </div>
+</div>
+
+<div id="q2-vet" class="section">
+  <div class="section-header"><div class="section-icon">🎓</div><div><div class="section-sub">Section E · GDVT</div><h2>VET: Milestones Achieved</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🎖️</div><h3>AdA Train-the-Trainer</h3><p>7 participants completed the course. Rooted in DIHK AdA International and German Trainer Aptitude Act, crafted for the Malaysian landscape.</p></div>
+    <div class="card accent"><div class="ci">🔧</div><h3>Precision Machining Exam Board</h3><p>Appointed 25 June at PSDC. Board members from B. Braun, Smith & Nephew, and VAT Manufacturing — to oversee examinations.</p></div>
+    <div class="card green"><div class="ci">🎒</div><h3>Education Fair — Penang</h3><p>29–30 June at Setia Spice. In collaboration with VAT Manufacturing (Precision Machining) and Bosch (Mechatronics). Significant on-the-spot registrations.</p></div>
+  </div>
+</div>
+
+<div id="q2-chamber" class="section">
+  <div class="section-header"><div class="section-icon">🏛️</div><div><div class="section-sub">Section F · Communications</div><h2>Chamber: Events & Members</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📈</div><h3>Total Members: 437</h3><p>12 new applications, 10 resignations. Strong net growth despite higher resignations vs prior year.</p><span class="win">✓ Net +2</span></div>
+    <div class="card accent"><div class="ci">🎉</div><h3>10 Events · 342 Participants</h3><p>Highlights: 4th German-Malaysian Business Forum (MOSTI keynote), 33rd AGM at Four Seasons (MITI keynote, 100+ guests), 3 Tuesday Clubs, Premium Luncheons.</p></div>
+  </div>
+  <div class="highlight-box"><h3>📰 PR Highlight</h3><p>57 media mentions. PR value <strong>RM648,401</strong> — up 220% vs Q2 2023. Key coverage: ED Jan Noether appointment, Business Forum, AGM, World Business Outlook Survey. LinkedIn approaching <strong>9,000</strong> followers.</p></div>
+  <div class="highlight-box" style="background:linear-gradient(135deg,#2a6e47,#1a8a55);"><h3>🏆 AGM Highlight</h3><p>33rd AGM successfully held 27 June. MITI Minister Tengku Zafrul delivered keynote. Ms <strong>Geetha Kandiah</strong> elected as new President — the 3rd female president to lead MGCC.</p></div>
+</div>
+
+<div id="q2-accounts" class="section">
+  <div class="section-header"><div class="section-icon">💼</div><div><div class="section-sub">Section D · Accounts</div><h2>Accounts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>17 Total Clients</h3><p><strong>9 accounting services</strong> and <strong>17 payroll services</strong>. Personal income tax submissions and FYE Dec audit deadlines managed during Q2.</p></div>
+  </div>
+</div>
+
+<div id="q2-hr" class="section">
+  <div class="section-header"><div class="section-icon">👥</div><div><div class="section-sub">Section G · Admin & HR</div><h2>People & Operations</h2></div></div>
+  <div class="hr-grid">
+    <div class="hr-card"><div class="big">30</div><div class="sub">Total Headcount<br>29 perm · 1 fixed-term</div></div>
+    <div class="hr-card"><div class="big">3</div><div class="sub">Interns</div></div>
+  </div>
+  <div class="card-grid">
+    <div class="card green"><div class="ci">🟢</div><h3>New Joiners</h3><p><strong>Nurul Shahinaz</strong> — GDVT Manager (1 Apr)<br><strong>Jan Noether</strong> — Executive Director (1 May)</p></div>
+    <div class="card accent"><div class="ci">🔴</div><h3>Leavers</h3><p><strong>Dr Eva Langerbeck</strong> — Deputy ED & Head Corporate Services, last day 21 Jun<br><strong>Sebastian Shamsudin</strong> — Membership Relations Manager, last day 24 Jun</p></div>
+    <div class="card"><div class="ci">🛡️</div><h3>IT Updates</h3><p>TLS 1.3 and SSL update for website scanning. Microsoft patching Critical Exploited Vulnerabilities. Final DELL laptop warranty renewal (2020 batch, 20+ laptops).</p></div>
+  </div>
+</div>
+
+</div><!-- end Q2 2024 -->
+
+
+<!-- Q3 2024 -->
+<div id="q3" class="quarter-view">
+
+<div class="hero">
+  <div class="tag">Q3 2024 · Jul – Sep</div>
+  <h1>MGCC Executive<br><span>Director's Report</span></h1>
+  <p>Malaysian-German Chamber of Commerce and Industry</p>
+  <div class="meta">
+    <div class="meta-item"><strong>5 Dec 2024</strong>Board Meeting · KL</div>
+    <div class="meta-item"><strong>29</strong>Team Members</div>
+    <div class="meta-item"><strong>453</strong>Total Members</div>
+    <div class="meta-item"><strong>7</strong>Events Held</div>
+  </div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-item"><div class="stat-tooltip">185 visa applications YTD</div><div class="num">185</div><div class="label">Visas YTD</div></div>
+  <div class="stat-item"><div class="stat-tooltip">GDP grew 5.3% in Q3</div><div class="num">5.3%</div><div class="label">GDP Growth</div></div>
+  <div class="stat-item"><div class="stat-tooltip">RM14.5B foreign direct investment</div><div class="num">RM14.5B</div><div class="label">FDI in Q3</div></div>
+  <div class="stat-item"><div class="stat-tooltip">92% rate conditions good/satisfactory</div><div class="num">92%</div><div class="label">Firms: Confident</div></div>
+  <div class="stat-item"><div class="stat-tooltip">4 delegations, ~307 participants</div><div class="num">307</div><div class="label">Delegation Pax</div></div>
+  <div class="stat-item"><div class="stat-tooltip">37 new Mechatronics enrollees</div><div class="num">37</div><div class="label">GDVT Intake</div></div>
+</div>
+
+<nav>
+  <button class="active" onclick="showSection('q3','q3-overview',this)">📊 Overview</button>
+  <button onclick="showSection('q3','q3-services',this)">🛂 Services</button>
+  <button onclick="showSection('q3','q3-delegations',this)">🤝 Delegations</button>
+  <button onclick="showSection('q3','q3-vet',this)">🎓 VET</button>
+  <button onclick="showSection('q3','q3-chamber',this)">🏛️ Chamber</button>
+  <button onclick="showSection('q3','q3-accounts',this)">💼 Accounts</button>
+  <button onclick="showSection('q3','q3-hr',this)">👥 HR & IT</button>
+</nav>
+
+<div id="q3-overview" class="section active">
+  <div class="section-header"><div class="section-icon">📊</div><div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">💪</div><h3>5.3% GDP Growth</h3><p>Surpassing expectations, driven by services and manufacturing gains. On track for revised annual growth forecast. Slowdown from 5.9% Q2 due to oil & gas decline.</p></div>
+    <div class="card accent"><div class="ci">💰</div><h3>FDI Surging</h3><p>RM14.5 billion (€3.1B) in foreign direct investments in Q3 — up from RM9.1B in Q2. Strong confidence in Malaysia's continued trajectory.</p></div>
+    <div class="card green"><div class="ci">🏢</div><h3>MGCC Restructure</h3><p>New two-pillar structure (Membership + Services). Oracle selected as ERP vendor — a milestone in MGCC's digitalisation journey.</p></div>
+  </div>
+  <div class="highlight-box"><h3>📊 World Business Outlook — Fall 2024</h3><p><strong>92%</strong> rate conditions "good/satisfactory" · <strong>97%</strong> expect stable/positive for 2025 · <strong>63%</strong> anticipate growth · Top challenges: demand, economic policy, skilled worker shortage.</p></div>
+</div>
+
+<div id="q3-services" class="section">
+  <div class="section-header"><div class="section-icon">🛂</div><div><div class="section-sub">Section C · Services</div><h2>Visa & Trade Services</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>185 Visa Applications YTD</h3><p>August recorded the highest number at 29 visas processed. Full range of visa types handled with zero pending cases over 4 months.</p></div>
+    <div class="card accent"><div class="ci">🔍</div><h3>Market Services</h3><p>1 market research project completed. 6 partner searches, 1 address list request. Ongoing interest in location analysis, market studies, and supplier sourcing.</p></div>
+  </div>
+</div>
+
+<div id="q3-delegations" class="section">
+  <div class="section-header"><div class="section-icon">🤝</div><div><div class="section-sub">Section C · Services</div><h2>Delegations: A Blockbuster Quarter</h2></div></div>
+  <div class="timeline">
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">3–5 July</div><h4>🎓 Education & Training MEP <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>9 German training providers, ~90 local participants, visit to GMI.</p><div class="t-detail">Under BMWK. Conference + individual B2Bs to explore collaboration. Group visit to German-Malaysian Institute coordinated.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">9–11 July</div><h4>⚙️ German Machine Tool Builders (VDW) <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>9 companies, ~100 conference participants, B2Bs, factory visits.</p><div class="t-detail">Factory visits to Airfoil Services and Kum Hoi Engineering. Deepened understanding of machine tool usage in Malaysian manufacturing.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">4–7 Sep</div><h4>🏛️ Minister Delegation Saxony-Anhalt <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Minister Sven Schulze led 17-person delegation to Malaysia.</p><div class="t-detail">MGCC briefing on economic situation, roundtable with Malaysian authorities, site visits to CelcomDigi AI Centre and Petronas.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">9–13 Sep</div><h4>💧 Water Technologies MEP <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>11 German providers, ~100 participants from public & private water sector.</p><div class="t-detail">Group visits to Air Selangor and Indah Water Consortium. Roundtable with Ministry of Energy Transition and Water Transformation (PETRA).</div></div>
+  </div>
+</div>
+
+<div id="q3-vet" class="section">
+  <div class="section-header"><div class="section-icon">🎓</div><div><div class="section-sub">Section C · GDVT</div><h2>VET: Historic Firsts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🎓</div><h3>Graduation: 20 Mechatronics</h3><p>15 from B. Braun + 5 from Bosch. Advanced Skills Diploma Level 5 + MGCC–DIHK certification.</p><span class="win">✓ Class of 2020 graduates</span></div>
+    <div class="card accent"><div class="ci">🏆</div><h3>First Industriemeister Graduation</h3><p>9 graduates from B. Braun. MGCC is the <strong>first AHK worldwide</strong> to offer Industriemeister in the A-certification corridor outside of Germany.</p><span class="win">✓ World first!</span></div>
+    <div class="card green"><div class="ci">🆕</div><h3>2024 Intake: 37 Enrollees</h3><p>Commenced 2 Sep at PSDC. 8 companies including new partner Klose Industrial Services. 3.5-year programme.</p></div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🎤 LepakDiplomacy Session — 16 Aug <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">German Ambassador Dr Blomeyer and ED Jan Noether featured. 100+ students from various institutions. Discussed skills deficit and TVET opportunities.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🤝 GDVT Network Session at Bosch — 22 Aug <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Annual session hosted by Robert Bosch. Robust participation from all GDVT training partners. Knowledge exchange, challenge discussion, and strategic growth planning.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🎓 Ciba Vision Graduation — 11 Sep <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">3 Mechatronics graduates from GDVT class of 2020 at Alcon. All three secured permanent positions. Address by Alcon MD Dr. Govindasamy.</div>
+  </div>
+</div>
+
+<div id="q3-chamber" class="section">
+  <div class="section-header"><div class="section-icon">🏛️</div><div><div class="section-sub">Section D · Chamber</div><h2>Chamber: Growing Strong</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📈</div><h3>Total Members: 453</h3><p>11 new applications, 6 resignations. 4% increase from Q2. Strong net growth continues.</p><span class="win">✓ +5 net</span></div>
+    <div class="card accent"><div class="ci">🎉</div><h3>7 Events · 232 Participants</h3><p>Penang Sundowner (120 pax, inter-chamber with MDBC & BeLuxCham), JLL event management, 4 workshops/Tuesday Clubs.</p></div>
+  </div>
+  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:4px 0 12px;">New Members</p>
+  <div>
+    <span class="member-chip">Nehmira Ventures</span>
+    <span class="member-chip">Nord-Lock</span>
+    <span class="member-chip">OCBC Bank Malaysia</span>
+    <span class="member-chip">Drees & Sommer APAC</span>
+    <span class="member-chip">Reinhausen Asia Pacific</span>
+    <span class="member-chip">XPASIA Growth Partners</span>
+    <span class="member-chip">Trans International Logistiks</span>
+  </div>
+</div>
+
+<div id="q3-accounts" class="section">
+  <div class="section-header"><div class="section-icon">💼</div><div><div class="section-sub">Section E · Accounts</div><h2>Accounts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>25 Total Clients</h3><p><strong>9 accounting</strong> and <strong>16 payroll</strong> clients. LHDN launched e-PCB PLUS System on MyTax portal (Phase 1 on 24 Sep) — unified PCB management.</p></div>
+  </div>
+</div>
+
+<div id="q3-hr" class="section">
+  <div class="section-header"><div class="section-icon">👥</div><div><div class="section-sub">Section F · Admin & HR</div><h2>People & Operations</h2></div></div>
+  <div class="hr-grid">
+    <div class="hr-card"><div class="big">29</div><div class="sub">Total Headcount<br>28 perm · 1 fixed-term</div></div>
+    <div class="hr-card"><div class="big">3</div><div class="sub">Interns</div></div>
+  </div>
+  <div class="card-grid">
+    <div class="card green"><div class="ci">🟢</div><h3>New Joiners</h3><p><strong>Tara Méité</strong> — Deputy ED & Head of Services (1 Jul)<br><strong>Natasya Falina Abd Rahman</strong> — Head of Membership Affairs (1 Aug)</p></div>
+    <div class="card accent"><div class="ci">🔴</div><h3>Leavers</h3><p><strong>Sabine Franze</strong> — Head of Comms, last day 30 Jul<br><strong>Tan Jin Ting</strong> — Jr Manager Corporate Services, 12 Sep<br><strong>Ivy Lee</strong> — Sr Accounts Executive, 30 Sep</p></div>
+    <div class="card"><div class="ci">🛡️</div><h3>IT & Compliance</h3><p>Windows 11 24H2 update with improved Wi-Fi, power efficiency, AI Copilot for M365. OSH Coordinator registered under new OSHA 1994 regulations.</p></div>
+  </div>
+</div>
+
+</div><!-- end Q3 2024 -->
+
+
+<!-- Q4 2024 -->
+<div id="q4" class="quarter-view">
+
+<div class="hero">
+  <div class="tag">Q4 2024 · Oct – Dec</div>
+  <h1>MGCC Executive<br><span>Director's Report</span></h1>
+  <p>Malaysian-German Chamber of Commerce and Industry</p>
+  <div class="meta">
+    <div class="meta-item"><strong>5 Dec 2024</strong>Board Meeting · KL</div>
+    <div class="meta-item"><strong>29</strong>Team Members</div>
+    <div class="meta-item"><strong>453</strong>Total Members</div>
+    <div class="meta-item"><strong>8</strong>Events Held</div>
+  </div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-item"><div class="stat-tooltip">185 visa applications full year</div><div class="num">185</div><div class="label">Visas (Full Year)</div></div>
+  <div class="stat-item"><div class="stat-tooltip">Oktoberfest — 587 attendees</div><div class="num">587</div><div class="label">Oktoberfest</div></div>
+  <div class="stat-item"><div class="stat-tooltip">8 events, 901 participants</div><div class="num">901</div><div class="label">Event Pax</div></div>
+  <div class="stat-item"><div class="stat-tooltip">Oracle ERP selected in Q4</div><div class="num">ERP</div><div class="label">Oracle Go-Live</div></div>
+  <div class="stat-item"><div class="stat-tooltip">9 trade fairs promoted</div><div class="num">9</div><div class="label">Trade Fairs</div></div>
+  <div class="stat-item"><div class="stat-tooltip">453 total members, net +16 for year</div><div class="num">453</div><div class="label">Members YE</div></div>
+</div>
+
+<nav>
+  <button class="active" onclick="showSection('q4','q4-overview',this)">📊 Overview</button>
+  <button onclick="showSection('q4','q4-services',this)">🛂 Services</button>
+  <button onclick="showSection('q4','q4-fairs',this)">🎪 Trade Fairs</button>
+  <button onclick="showSection('q4','q4-chamber',this)">🏛️ Chamber</button>
+  <button onclick="showSection('q4','q4-accounts',this)">💼 Accounts</button>
+  <button onclick="showSection('q4','q4-hr',this)">👥 HR & IT</button>
+</nav>
+
+<div id="q4-overview" class="section active">
+  <div class="section-header"><div class="section-icon">📊</div><div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📊</div><h3>Economy on Track</h3><p>5.3% Q3 growth surpassed expectations. Services and manufacturing driving gains. FDI up to RM14.5B. Meeting revised annual forecasts.</p></div>
+    <div class="card accent"><div class="ci">🔄</div><h3>Digital Transformation</h3><p>Oracle selected as ERP vendor in Q4 — integrating core processes into a unified platform. A milestone in MGCC's digitalisation journey.</p></div>
+    <div class="card green"><div class="ci">🏗️</div><h3>New Structure Bedding In</h3><p>Two-pillar model (Membership + Services) now fully operational under Natasya and Tara respectively. Visa uptake slower in Oct-Nov.</p></div>
+  </div>
+</div>
+
+<div id="q4-services" class="section">
+  <div class="section-header"><div class="section-icon">🛂</div><div><div class="section-sub">Section C · Services</div><h2>Visa & Trade Services</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>185 Visas — Full Year 2024</h3><p>Slow uptake in Oct-Nov. Highest month: August (29 cases). Zero pending cases over 4 months throughout the year.</p></div>
+    <div class="card accent"><div class="ci">🔍</div><h3>Market Services</h3><p>Location analysis, market studies, supplier/distributor sourcing remain popular. 6 partner searches, 1 address list, 1 market research project in pipeline.</p></div>
+  </div>
+  <div class="chart-wrap"><h3>Visa Applications by Month — Full Year 2024</h3>
+    <div class="bar-row"><div class="bar-label">January</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="69">20</div></div><div class="bar-val">20</div></div>
+    <div class="bar-row"><div class="bar-label">February</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="62">18</div></div><div class="bar-val">18</div></div>
+    <div class="bar-row"><div class="bar-label">March</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="72">21</div></div><div class="bar-val">21</div></div>
+    <div class="bar-row"><div class="bar-label">April</div><div class="bar-track"><div class="bar-fill" style="background:#005599" data-w="52">15</div></div><div class="bar-val">15</div></div>
+    <div class="bar-row"><div class="bar-label">May</div><div class="bar-track"><div class="bar-fill" style="background:#005599" data-w="45">13</div></div><div class="bar-val">13</div></div>
+    <div class="bar-row"><div class="bar-label">June</div><div class="bar-track"><div class="bar-fill" style="background:#005599" data-w="45">13</div></div><div class="bar-val">13</div></div>
+    <div class="bar-row"><div class="bar-label">July</div><div class="bar-track"><div class="bar-fill" style="background:#0077cc" data-w="38">11</div></div><div class="bar-val">11</div></div>
+    <div class="bar-row"><div class="bar-label">August</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="100">31</div></div><div class="bar-val">31</div></div>
+    <div class="bar-row"><div class="bar-label">September</div><div class="bar-track"><div class="bar-fill" style="background:#0077cc" data-w="69">20</div></div><div class="bar-val">20</div></div>
+    <div class="bar-row"><div class="bar-label">October</div><div class="bar-track"><div class="bar-fill" style="background:#2eab6f" data-w="79">23</div></div><div class="bar-val">23</div></div>
+    <div class="bar-row"><div class="bar-label">November</div><div class="bar-track"><div class="bar-fill" style="background:#aaa" data-w="7">7</div></div><div class="bar-val">7</div></div>
+    <div class="bar-row"><div class="bar-label">December</div><div class="bar-track"><div class="bar-fill" style="background:#aaa" data-w="0">0</div></div><div class="bar-val">0</div></div>
+  </div>
+</div>
+
+<div id="q4-fairs" class="section">
+  <div class="section-header"><div class="section-icon">🎪</div><div><div class="section-sub">Section C · Services</div><h2>Trade Fairs: 9 Promoted</h2></div></div>
+  <div class="ep-table"><table>
+    <thead><tr><th>Date</th><th>Trade Fair</th></tr></thead>
+    <tbody>
+      <tr><td>7–9 Oct</td><td>EXPO REAL, Munich</td></tr>
+      <tr><td>14–16 Oct</td><td>IFAT India</td></tr>
+      <tr><td>16–19 Oct</td><td>bau China</td></tr>
+      <tr><td>12–15 Nov</td><td>electronica Munich</td></tr>
+      <tr><td>26–29 Nov</td><td>bauma China</td></tr>
+      <tr><td>3–5 Dec</td><td>ISPO Munich</td></tr>
+      <tr><td>11–13 Dec</td><td>ASEAN Ceramic Vietnam</td></tr>
+      <tr><td>11–13 Dec</td><td>Glasstech Asia, Vietnam</td></tr>
+      <tr><td>11–14 Dec</td><td>bauma Conexpo India</td></tr>
+    </tbody>
+  </table></div>
+  <div class="highlight-box"><h3>📅 2025 Budget Secured</h3><p>Promotional budget allocated for <strong>iba Düsseldorf 2025</strong> and <strong>drinktec Munich 2025</strong>.</p></div>
+</div>
+
+<div id="q4-chamber" class="section">
+  <div class="section-header"><div class="section-icon">🏛️</div><div><div class="section-sub">Section D · Chamber</div><h2>Chamber: A Festive Finish</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📈</div><h3>Total Members: 453</h3><p>Year-end total. Strong net growth throughout 2024 (from 433 in Q1 to 453 by year-end).</p><span class="win">✓ +20 net for 2024</span></div>
+    <div class="card accent"><div class="ci">🎉</div><h3>8 Events · 901 Participants</h3><p>Oktoberfest (587!), Healthcare Outlook (70), iESG Workshop (37), Commerzbank Outlook (22), Jingle & Mingle, and more.</p></div>
+  </div>
+  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Q4 Events</p>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🏥 Healthcare Industry Outlook — 4 Oct (70 pax) <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Explored Malaysian healthcare sector opportunities: current industry status, foreign investment potential, sustainability contributions, innovation and job creation.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🌿 iESG Workshop with MITI — 10 Oct (37 pax) <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Inter-chamber collaboration at MITEC with BeLuxCham Malaysia and CCI France Malaysia.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🍺 Oktoberfest — 19 Oct (587 pax) <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Annual Oktoberfest held at One World Hotel Petaling Jaya. Massive turnout of 587 participants — by far the largest event of the year.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">💰 Commerzbank Economic Outlook — 2 Dec (22 pax) <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Impact of President-elect Trump's policies, Fed rate cuts, ASEAN's China +1 strategy. Moderated by Commerzbank Chief Economist Charlie Lay.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🎄 Jingle & Mingle — 6 Dec <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Annual festive gathering to close out the year. Members and partners reconnected and celebrated 2024's achievements.</div>
+  </div>
+</div>
+
+<div id="q4-accounts" class="section">
+  <div class="section-header"><div class="section-icon">💼</div><div><div class="section-sub">Section E · Accounts</div><h2>Accounts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>25 Total Clients</h3><p><strong>9 accounting</strong> and <strong>16 payroll</strong> clients. e-PCB PLUS System fully launched on MyTax portal for unified Monthly Tax Deduction management.</p></div>
+  </div>
+</div>
+
+<div id="q4-hr" class="section">
+  <div class="section-header"><div class="section-icon">👥</div><div><div class="section-sub">Section F · Admin & HR</div><h2>People & Operations</h2></div></div>
+  <div class="hr-grid">
+    <div class="hr-card"><div class="big">29</div><div class="sub">Total Headcount<br>28 perm · 1 fixed-term</div></div>
+    <div class="hr-card"><div class="big">3</div><div class="sub">Interns (Services)</div></div>
+  </div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🛡️</div><h3>IT: Windows 11 24H2</h3><p>Improved Wi-Fi, power efficiency, QR code sharing, Bluetooth File Explorer access, built-in compression tools, Copilot AI for M365.</p></div>
+    <div class="card accent"><div class="ci">⚕️</div><h3>OSHA Compliance</h3><p>OSH Coordinator registered and appointed under the new Occupational Safety and Health Act 1994, effective 1 June 2024.</p></div>
+  </div>
+</div>
+
+</div><!-- end Q4 2024 -->
+
+</div><!-- end 2024 -->
+
+
+<!-- ################################################################ -->
+<!-- 2025 -->
+<!-- ################################################################ -->
+<div id="y2025" class="year-view">
+
+<div class="q-selector" id="q-selector-2025">
+  <button class="active" onclick="showQuarter('q1-25','q-selector-2025',this)">Q1 · Jan–Mar</button>
+  <button onclick="showQuarter('q2-25','q-selector-2025',this)">Q2 · Apr–Jun</button>
+  <button onclick="showQuarter('q3-25','q-selector-2025',this)">Q3 · Jul–Sep</button>
+  <button onclick="showQuarter('q4-25','q-selector-2025',this)">Q4 · Oct–Dec</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- Q1 2025 -->
+<!-- ============================================================ -->
+<div id="q1-25" class="quarter-view active">
+
+<div class="hero">
+  <div class="tag">Q1 2025 · Jan – Mar</div>
+  <h1>MGCC Executive<br><span>Director's Report</span></h1>
+  <p>Malaysian-German Chamber of Commerce and Industry</p>
+  <div class="meta">
+    <div class="meta-item"><strong>26 Jun 2025</strong>Board Meeting · KL</div>
+    <div class="meta-item"><strong>30</strong>Team Members</div>
+    <div class="meta-item"><strong>461</strong>Total Members</div>
+    <div class="meta-item"><strong>3</strong>Events Held</div>
+  </div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-item"><div class="stat-tooltip">46 visas + 5 licence apps</div><div class="num">46</div><div class="label">Visas Processed</div></div>
+  <div class="stat-item"><div class="stat-tooltip">GDP grew 4.4% YoY</div><div class="num">4.4%</div><div class="label">GDP Growth</div></div>
+  <div class="stat-item"><div class="stat-tooltip">8 new, 0 resignations</div><div class="num">+8</div><div class="label">Net Members</div></div>
+  <div class="stat-item"><div class="stat-tooltip">126 visitors at BAU + Laser World</div><div class="num">126</div><div class="label">Fair Visitors</div></div>
+  <div class="stat-item"><div class="stat-tooltip">132 delegation participants</div><div class="num">132</div><div class="label">Delegation Pax</div></div>
+  <div class="stat-item"><div class="stat-tooltip">100% pass rate Precision Machining</div><div class="num">100%</div><div class="label">PM Pass Rate</div></div>
+</div>
+
+<nav>
+  <button class="active" onclick="showSection('q1-25','q125-overview',this)">📊 Overview</button>
+  <button onclick="showSection('q1-25','q125-services',this)">🛂 Services</button>
+  <button onclick="showSection('q1-25','q125-fairs',this)">🎪 Trade Fairs</button>
+  <button onclick="showSection('q1-25','q125-delegations',this)">🤝 Delegations</button>
+  <button onclick="showSection('q1-25','q125-vet',this)">🎓 VET</button>
+  <button onclick="showSection('q1-25','q125-chamber',this)">🏛️ Chamber</button>
+  <button onclick="showSection('q1-25','q125-accounts',this)">💼 Accounts</button>
+  <button onclick="showSection('q1-25','q125-hr',this)">👥 HR & IT</button>
+</nav>
+
+<div id="q125-overview" class="section active">
+  <div class="section-header"><div class="section-icon">📊</div><div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🇲🇾</div><h3>4.4% GDP Growth</h3><p>Driven by strong domestic demand, robust investment, and steady private consumption. Services (5.0%), manufacturing (4.1%), and construction (14.2%) supported growth.</p><span class="win">✓ Inflation low at 1.5%</span></div>
+    <div class="card accent"><div class="ci">🌏</div><h3>Malaysia ASEAN Chair 2025</h3><p>Hosted ASEAN Foreign Ministers' Retreat (Langkawi), Tourism Forum (Johor), Creative Economy Symposium (KL). 350+ meetings planned for the year.</p></div>
+    <div class="card green"><div class="ci">📦</div><h3>Exports Rising</h3><p>Exports rose 6.8% in March with a notable 50.8% increase to the U.S. Potential tariff changes may affect future trade. Unemployment fell to 3.1%.</p></div>
+  </div>
+  <div class="highlight-box"><h3>🏛️ MGCC Highlights</h3><p>Hosted the <strong>Risk Management Rollout Workshop for AHKs in Asia</strong>. Launched <strong>Energy and Automotive Working Groups</strong>. Commenced comprehensive <strong>NetSuite ERP training</strong> as part of digital transformation.</p></div>
+</div>
+
+<div id="q125-services" class="section">
+  <div class="section-header"><div class="section-icon">🛂</div><div><div class="section-sub">Section C · Services</div><h2>Visa & Corporate Services</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>46 Visas + 5 Licence Apps</h3><p>Customer base widened significantly leading to higher contributions in later quarters. As of 19 June, total caseload reached 116 applications.</p></div>
+    <div class="card accent"><div class="ci">🆕</div><h3>ePASS Rollout</h3><p>JIM implemented ePASS replacing conventional stickers for Employment Pass (Cat I–III), PVP, Residence Pass-Talent, Dependant Pass, and LTSVP effective 1 March 2025.</p></div>
+    <div class="card green"><div class="ci">🛂</div><h3>New Investor Pass</h3><p>Effective 1 April 2025 — a multiple-entry visa for foreign investors to facilitate business activities. Two categories: New Investor and Investor in Pipeline.</p></div>
+  </div>
+  <div class="highlight-box"><h3>⚠️ Policy Updates</h3><p>JPJ stopped converting foreign driving licences to Malaysian licences (19 May). New e-ABTC portal launched by MITI for streamlined APEC Business Travel Card applications.</p></div>
+</div>
+
+<div id="q125-fairs" class="section">
+  <div class="section-header"><div class="section-icon">🎪</div><div><div class="section-sub">Section C · Services</div><h2>Trade Fairs: 126 Visitors</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🏟️</div><h3>3 German Trade Fairs Represented</h3><p>MGCC continues to represent three major German trade fairs with promotional activities and acquisition for exhibitors and visitors.</p></div>
+  </div>
+  <div class="chart-wrap"><h3>Q1 Trade Fair Visitors</h3>
+    <div class="bar-row"><div class="bar-label">BAU Munich (13–17 Jan)</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="100">84</div></div><div class="bar-val">84</div></div>
+    <div class="bar-row"><div class="bar-label">Laser World of Photonics China (11–13 Mar)</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="50">42</div></div><div class="bar-val">42</div></div>
+  </div>
+</div>
+
+<div id="q125-delegations" class="section">
+  <div class="section-header"><div class="section-icon">🤝</div><div><div class="section-sub">Section C · Services</div><h2>Delegations & Projects</h2></div></div>
+  <div class="timeline">
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">24 Jan</div><h4>🏬 Handelsverband Sachsen Visit <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Half-day country briefing and intercultural workshop with ~15 participants.</p><div class="t-detail">Delegation conducted store checks in Malaysian shopping and retail outlets to gauge product range potential.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">6–7 Feb</div><h4>💧 H2 Delegation to Chiang Mai <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Two-day public training at Chiang Mai University with GIZ on hydrogen.</p><div class="t-detail">MGCC organised and led a Malaysian delegation to the Chiang Mai Hydrogen Knowledge Hub for management and technical training.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">10 Mar</div><h4>🎓 University of Mainz Visit <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>~30 International Business Students for a half-day country and intercultural briefing.</p><div class="t-detail">Students learned about the Malaysian market, its potential and challenges.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">Feb–Jul</div><h4>🛒 4th Purchase Initiative ASEAN <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>87 Malaysian participants at the webinar. Malaysia again top in supplier registrations.</p><div class="t-detail">In collaboration with BME. Selected suppliers entered a 3-week B2B matching from June to July 2025.</div></div>
+  </div>
+</div>
+
+<div id="q125-vet" class="section">
+  <div class="section-header"><div class="section-icon">🎓</div><div><div class="section-sub">Section C · GDVT</div><h2>VET: Strong Results & New Partnerships</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🎖️</div><h3>100% Pass Rate — Precision Machining</h3><p>21 candidates in the Journeyman Part 1 exam achieved a 100% pass rate at PSDC Penang (March 2025).</p><span class="win">✓ Perfect score</span></div>
+    <div class="card accent"><div class="ci">📝</div><h3>Mechatronics Final Exam Part 2</h3><p>26 candidates (21 Penang, 5 KL). 85.7% passed with A certificate in Penang. Strong performance overall.</p></div>
+    <div class="card green"><div class="ci">🤝</div><h3>New Funding & Accreditation</h3><p>TalentCorp–MYSIP (double tax deduction), UniMAP study pathway for PM graduates, MBOT TC/TS accreditation (ongoing), JPK ADI briefing.</p></div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🇩🇪 HWK Frankfurt Verification Visit — 5–7 Mar <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Delegation from HWK Frankfurt-Rhein-Main verified the GDVT Precision Machining programme. Site visits to B. Braun, VAT Manufacturing, and Smith & Nephew. Discussed a proposed Apprentice Exchange Programme for 2–4-week reciprocal placements.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🏢 10 Companies Approached for GDVT <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Khazanah, ALAM, Zofar Mechanical, TUV Rheinland, Preston Technology, MnR Group, UWC Berhad, DHL, Port Tanjung Pelepas, AGT German Technics.</div>
+  </div>
+</div>
+
+<div id="q125-chamber" class="section">
+  <div class="section-header"><div class="section-icon">🏛️</div><div><div class="section-sub">Section D · Chamber</div><h2>Chamber: Zero Resignations</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📈</div><h3>Total Members: 461</h3><p>8 new members and zero resignations in Q1 — a remarkably clean quarter for membership retention.</p><span class="win">✓ Net +8</span></div>
+    <div class="card accent"><div class="ci">🎉</div><h3>3 Events · 247 Participants</h3><p>New Year's Welcome Reception (125 pax), HR & Forensic Workshop with PwC (32 pax), Inter-Chamber Ladies Sundowner #SheLeads (90 pax).</p></div>
+  </div>
+  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:4px 0 12px;">New Members</p>
+  <div>
+    <span class="member-chip">Strive One Sdn Bhd</span>
+    <span class="member-chip">Messrs Teoh Pek Wei</span>
+    <span class="member-chip">David Lai & Tan</span>
+    <span class="member-chip">NANO Medic Care</span>
+    <span class="member-chip">GICON Sdn Bhd</span>
+    <span class="member-chip">Supreme Synergie Power</span>
+    <span class="member-chip">ALC International</span>
+    <span class="member-chip">Abroad EduWorld</span>
+  </div>
+</div>
+
+<div id="q125-accounts" class="section">
+  <div class="section-header"><div class="section-icon">💼</div><div><div class="section-sub">Section E · Accounts</div><h2>Accounts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>21 Chargeable Clients</h3><p><strong>9 accounting</strong> and <strong>12 payroll</strong> clients. Successfully transitioned to the new e-PCB Plus system by LHDN. Form EA distributed by 28 Feb; Form E submitted by 30 Apr deadline.</p></div>
+  </div>
+</div>
+
+<div id="q125-hr" class="section">
+  <div class="section-header"><div class="section-icon">👥</div><div><div class="section-sub">Section F · Admin & HR</div><h2>People & Operations</h2></div></div>
+  <div class="hr-grid">
+    <div class="hr-card"><div class="big">30</div><div class="sub">Total Headcount<br>29 perm · 1 fixed-term</div></div>
+    <div class="hr-card"><div class="big">4</div><div class="sub">Interns</div></div>
+  </div>
+  <div class="card-grid">
+    <div class="card green"><div class="ci">🟢</div><h3>New Joiners</h3><p><strong>Kumaran Nair Shanmugam</strong> — Head of VET (17 Feb)<br><strong>Mohamad Zhafran Haniff</strong> — KAM, Triflex Asia (1 Feb, fixed-term)<br><strong>Amanda How</strong> — converted to permanent (1 Feb)</p></div>
+    <div class="card accent"><div class="ci">🔴</div><h3>Leaver</h3><p><strong>Nursayugia Michelle Abu Bakar</strong> — Head of GDVT, last day 18 Jan</p></div>
+    <div class="card"><div class="ci">🛡️</div><h3>IT: Sophos XGS 2100 Firewall</h3><p>Successfully replaced older firewall for enhanced cyber threat protection, improved internet speed reliability, and greater network visibility. Transition completed with minimal disruption.</p></div>
+  </div>
+  <div class="highlight-box"><h3>🛡️ Insurance Renewals</h3><p>General Insurance, Directors & Officers Liability Insurance, and Errors & Omissions Insurance renewed for 2025–2026 in March to ensure uninterrupted coverage.</p></div>
+</div>
+
+</div><!-- end Q1 2025 -->
+
+
+<!-- ============================================================ -->
+<!-- Q2 2025 -->
+<!-- ============================================================ -->
+<div id="q2-25" class="quarter-view">
+
+<div class="hero">
+  <div class="tag">Q2 2025 · Apr – Jun</div>
+  <h1>MGCC Executive<br><span>Director's Report</span></h1>
+  <p>Malaysian-German Chamber of Commerce and Industry</p>
+  <div class="meta">
+    <div class="meta-item"><strong>2 Oct 2025</strong>Board Meeting · KL</div>
+    <div class="meta-item"><strong>31</strong>Team Members</div>
+    <div class="meta-item"><strong>455</strong>Total Members</div>
+    <div class="meta-item"><strong>16</strong>Events Held</div>
+  </div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-item"><div class="stat-tooltip">26 visas + 2 licence apps</div><div class="num">26</div><div class="label">Visas Processed</div></div>
+  <div class="stat-item"><div class="stat-tooltip">GDP grew 4.4% in Q2</div><div class="num">4.4%</div><div class="label">GDP Growth</div></div>
+  <div class="stat-item"><div class="stat-tooltip">9 exhibitors, 844 visitors at fairs</div><div class="num">844</div><div class="label">Fair Visitors</div></div>
+  <div class="stat-item"><div class="stat-tooltip">16 events, 805 participants</div><div class="num">805</div><div class="label">Event Pax</div></div>
+  <div class="stat-item"><div class="stat-tooltip">~20 German companies interested</div><div class="num">~20</div><div class="label">Market Enquiries</div></div>
+  <div class="stat-item"><div class="stat-tooltip">NRW ASEAN Service Desk launched</div><div class="num">NRW</div><div class="label">Desk Launch</div></div>
+</div>
+
+<nav>
+  <button class="active" onclick="showSection('q2-25','q225-overview',this)">📊 Overview</button>
+  <button onclick="showSection('q2-25','q225-services',this)">🛂 Services</button>
+  <button onclick="showSection('q2-25','q225-fairs',this)">🎪 Trade Fairs</button>
+  <button onclick="showSection('q2-25','q225-delegations',this)">🤝 Delegations</button>
+  <button onclick="showSection('q2-25','q225-vet',this)">🎓 VET</button>
+  <button onclick="showSection('q2-25','q225-chamber',this)">🏛️ Chamber</button>
+  <button onclick="showSection('q2-25','q225-accounts',this)">💼 Accounts</button>
+  <button onclick="showSection('q2-25','q225-hr',this)">👥 HR & IT</button>
+</nav>
+
+<div id="q225-overview" class="section active">
+  <div class="section-header"><div class="section-icon">📊</div><div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">💪</div><h3>4.4% GDP Growth</h3><p>Strong economic growth driven by robust domestic demand, increased household spending and investments. Ringgit appreciated against the US dollar.</p></div>
+    <div class="card accent"><div class="ci">🏗️</div><h3>JS-SEZ & Arm Holdings</h3><p>Johor-Singapore Special Economic Zone attracting new capital. Arm Holdings investing to boost Malaysia's semiconductor industry.</p></div>
+    <div class="card green"><div class="ci">📜</div><h3>Key Legislation</h3><p>Online Safety Act 2025 gazetted. New regulations proposed for digital asset exchanges. Targeted subsidy rationalisation continuing.</p></div>
+  </div>
+  <div class="highlight-box"><h3>🏛️ 34th AGM & New Board</h3><p><strong>Florian Herrmann</strong> (Infineon) elected President · <strong>Teoh Tsu-Hsien</strong> (Henkel) as VP · <strong>Arne Graeber</strong> (Commerz Global) as Treasurer. Deputy ED Tara Méité attended AHK World Conference in Berlin.</p></div>
+  <div class="highlight-box" style="background:linear-gradient(135deg,#8b3a3a,#b04040);"><h3>👋 ED Departure</h3><p>On 21 May, ED <strong>Jan Noether</strong> announced his departure to become Director General of the Indo-German Chamber of Commerce (IGCC). Last day at MGCC: 31 July 2025.</p></div>
+</div>
+
+<div id="q225-services" class="section">
+  <div class="section-header"><div class="section-icon">🛂</div><div><div class="section-sub">Section C · Services</div><h2>Visa & Corporate Services</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>26 Visas + 2 Licence Apps</h3><p>Visa processing continued with ePASS and Investor Pass now in effect. Policy updates on driving licences and ABTC applications.</p></div>
+  </div>
+</div>
+
+<div id="q225-fairs" class="section">
+  <div class="section-header"><div class="section-icon">🎪</div><div><div class="section-sub">Section C · Services</div><h2>Trade Fairs: 844 Visitors</h2></div></div>
+  <div class="chart-wrap"><h3>Q2 Trade Fair Visitors & Exhibitors</h3>
+    <div class="bar-row"><div class="bar-label">IE Expo China (21–23 Apr)</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="100">356</div></div><div class="bar-val">356</div></div>
+    <div class="bar-row"><div class="bar-label">Bauma Munich (7–13 Apr)</div><div class="bar-track"><div class="bar-fill" style="background:#005599" data-w="99">354</div></div><div class="bar-val">354</div></div>
+    <div class="bar-row"><div class="bar-label">transport logistic (2–5 Jun)</div><div class="bar-track"><div class="bar-fill" style="background:#0077cc" data-w="21">76</div></div><div class="bar-val">76</div></div>
+    <div class="bar-row"><div class="bar-label">automatica (24–27 Jun)</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="9">31</div></div><div class="bar-val">31</div></div>
+    <div class="bar-row"><div class="bar-label">Analytica Vietnam (2–4 Apr)</div><div class="bar-track"><div class="bar-fill" style="background:#2eab6f" data-w="5">19</div></div><div class="bar-val">19</div></div>
+    <div class="bar-row"><div class="bar-label">Laser World of Photonics (24–27 Jun)</div><div class="bar-track"><div class="bar-fill" style="background:#7a4fcc" data-w="2">8</div></div><div class="bar-val">8</div></div>
+  </div>
+</div>
+
+<div id="q225-delegations" class="section">
+  <div class="section-header"><div class="section-icon">🤝</div><div><div class="section-sub">Section C · Services</div><h2>Delegations & Projects</h2></div></div>
+  <div class="timeline">
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">28 May</div><h4>🏢 NRW ASEAN Service Desk Launch <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Opening ceremony with 25 guests from MIDA, FMM, InvestKL, MATRADE, and MDEC.</p><div class="t-detail">NRW-Malaysia Business Roundtable Exchange held same day. Companies from North Rhine-Westphalia operating in Malaysia alongside other entities and start-ups participated. PR value RM93,000.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">26–30 May</div><h4>✈️ German Aerospace MEP Delegation <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>8 German solution providers in full-day conference, B2Bs, site visits, and authority roundtable.</p><div class="t-detail">Under BMWE Market Entry Program. Coordinated with SBS GmbH. Participants introduced products to Malaysian target audience and visited factories.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">May–Jun</div><h4>🇲🇾 CDC-JPA KARISMA Attachment Program <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>15 senior Malaysian government officials attached to German companies in Malaysia.</p><div class="t-detail">MGCC subcontracted by Carl-Duisberg-Centren (CDC) to acquire German companies and coordinate the week-long attachments before officials proceeded to Germany in September.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">Feb–Jul</div><h4>🛒 4th Purchase Initiative ASEAN (continued) <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>3-week individual online B2Bs between German buyers and Malaysian suppliers kicked off in June.</p><div class="t-detail">In collaboration with BME. Chamber provided continuous coordination and support for local participants.</div></div>
+  </div>
+</div>
+
+<div id="q225-vet" class="section">
+  <div class="section-header"><div class="section-icon">🎓</div><div><div class="section-sub">Section C · GDVT</div><h2>VET: Training & Industry Engagement</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🎖️</div><h3>AdA Training — 8 Participants</h3><p>Train-the-Trainer programme held 9–24 June 2025 with 8 participants from GDVT training companies.</p></div>
+    <div class="card accent"><div class="ci">🎓</div><h3>B. Braun Appreciation Ceremony</h3><p>14 May — Recognised Industriemeister Batch 2 and GDVT Mechatronics Intake Sep 2021 graduates at B. Braun.</p></div>
+    <div class="card green"><div class="ci">🏫</div><h3>Education Fairs & Outreach</h3><p>Malaysia Education Fair (Penang), Star Education Fair (Putrajaya), GMI Open Day, JPK Jerayawara in Ipoh and Perlis. New companies approached: Bollore, Gebrüder Weiss.</p></div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🤝 Delegation Visits — 22 May <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Visits from Karl Godderis (CEO EuroCham Malaysia), GOPA Worldwide Consultants, Dr. Rainer Gerke (TVET expert), and representatives from Robert Bosch, B. Braun, and VAT Manufacturing.</div>
+  </div>
+</div>
+
+<div id="q225-chamber" class="section">
+  <div class="section-header"><div class="section-icon">🏛️</div><div><div class="section-sub">Section D · Chamber</div><h2>Chamber: Record Engagement</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📈</div><h3>Total Members: 455</h3><p>14 new members and 6 resignations in Q2. Net decrease of 6 from Q1's 461 due to expected post-Q1 resignation processing.</p></div>
+    <div class="card accent"><div class="ci">🎉</div><h3>16 Events · 805 Participants</h3><p>Premium Luncheon (20 pax), 8 workshops (131 pax), Business Forum: Energy (115 pax), Golden Gala (235 pax), and more.</p></div>
+  </div>
+  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Key Events</p>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">⚡ German-Malaysian Business Forum: Energy (115 pax) <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">High-level exchange on Malaysia's green growth leadership as ASEAN Chair. Net-zero 2050 strategies, public-private partnerships. Insights from BMW Group Malaysia, TNB, MIDA. Panel with PETRA, Siemens Energy, TERA VA.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🍽️ Golden Gala — 235 Guests <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Inaugural Golden Gala celebrating Germany's culinary heritage. 1-Michelin-star Chef Uwe Opocensky. Supported by UOB Bank, Leica AG, Faber-Castell, Mercedes-Benz, Beiersdorf, and Shangri-La KL.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">👔 Premium Luncheon: Bursa Malaysia Chairman (20 pax) <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">20 of 30 premium members attended. Engaging dialogue on key economic initiatives and the future of carbon exchange.</div>
+  </div>
+</div>
+
+<div id="q225-accounts" class="section">
+  <div class="section-header"><div class="section-icon">💼</div><div><div class="section-sub">Section E · Accounts</div><h2>Accounts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>19 Chargeable Clients</h3><p><strong>8 accounting</strong> and <strong>11 payroll</strong> clients. Key focus: personal income tax submissions (Form BE by 30 Apr, Form B by 30 Jun) with advisory and compliance support.</p></div>
+  </div>
+</div>
+
+<div id="q225-hr" class="section">
+  <div class="section-header"><div class="section-icon">👥</div><div><div class="section-sub">Section F · Admin & HR</div><h2>People & Operations</h2></div></div>
+  <div class="hr-grid">
+    <div class="hr-card"><div class="big">31</div><div class="sub">Total Headcount<br>29 perm · 2 fixed-term</div></div>
+    <div class="hr-card"><div class="big">3</div><div class="sub">Interns</div></div>
+    <div class="hr-card"><div class="big">3%</div><div class="sub">Annual Increment</div></div>
+  </div>
+  <div class="card-grid">
+    <div class="card green"><div class="ci">🟢</div><h3>New Joiners</h3><p><strong>Nur Athira binti Mohd Ismail</strong> — Financial Services Executive (2 Jun)<br>New KAM for GICON (26 May, fixed-term)</p></div>
+    <div class="card accent"><div class="ci">🔴</div><h3>Leaver</h3><p><strong>Yusrina binti Yusaimi</strong> — Financial Services Assistant, last day 31 May</p></div>
+    <div class="card"><div class="ci">🛡️</div><h3>IT: Major Hardware Refresh</h3><p>15 new Dell Latitude Pro 14" laptops (i7 13th Gen, 16GB DDR5, 512GB NVMe, 5-year ProSupport). Adobe Acrobat Pro renewed. M365 Business License for new staff.</p></div>
+  </div>
+  <div class="highlight-box" style="background:linear-gradient(135deg,#2a6e47,#1a8a55);"><h3>🌈 DEI Training</h3><p>Internal DEI training with <strong>The Heartbased Group</strong> on 23 May to reinforce awareness, share best practices, and ensure compliance. Focused on fostering mutual respect and empowering staff against discrimination.</p></div>
+</div>
+
+</div><!-- end Q2 2025 -->
+
+
+<!-- ============================================================ -->
+<!-- Q3 2025 -->
+<!-- ============================================================ -->
+<div id="q3-25" class="quarter-view">
+
+<div class="hero">
+  <div class="tag">Q3 2025 · Jul – Sep</div>
+  <h1>MGCC Executive<br><span>Director's Report</span></h1>
+  <p>Malaysian-German Chamber of Commerce and Industry</p>
+  <div class="meta">
+    <div class="meta-item"><strong>5 Dec 2025</strong>Board Meeting · KL</div>
+    <div class="meta-item"><strong>34</strong>Team Members</div>
+    <div class="meta-item"><strong>450</strong>Total Members</div>
+    <div class="meta-item"><strong>14</strong>Events Held</div>
+  </div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-item"><div class="stat-tooltip">30 visas + 2 licence apps</div><div class="num">30</div><div class="label">Visas Processed</div></div>
+  <div class="stat-item"><div class="stat-tooltip">GDP grew 5.2% YoY</div><div class="num">5.2%</div><div class="label">GDP Growth</div></div>
+  <div class="stat-item"><div class="stat-tooltip">RM8.5B FDI in Q3</div><div class="num">RM8.5B</div><div class="label">FDI Inflows</div></div>
+  <div class="stat-item"><div class="stat-tooltip">500 visitors at 6 trade fairs</div><div class="num">500</div><div class="label">Fair Visitors</div></div>
+  <div class="stat-item"><div class="stat-tooltip">~60 B2B meetings via BME</div><div class="num">~60</div><div class="label">B2B Meetings</div></div>
+  <div class="stat-item"><div class="stat-tooltip">New ED Hannes Farlock joined 15 Sep</div><div class="num">New ED</div><div class="label">Hannes Farlock</div></div>
+</div>
+
+<nav>
+  <button class="active" onclick="showSection('q3-25','q325-overview',this)">📊 Overview</button>
+  <button onclick="showSection('q3-25','q325-services',this)">🛂 Services</button>
+  <button onclick="showSection('q3-25','q325-fairs',this)">🎪 Trade Fairs</button>
+  <button onclick="showSection('q3-25','q325-delegations',this)">🤝 Delegations</button>
+  <button onclick="showSection('q3-25','q325-vet',this)">🎓 VET</button>
+  <button onclick="showSection('q3-25','q325-chamber',this)">🏛️ Chamber</button>
+  <button onclick="showSection('q3-25','q325-accounts',this)">💼 Accounts</button>
+  <button onclick="showSection('q3-25','q325-hr',this)">👥 HR & IT</button>
+</nav>
+
+<div id="q325-overview" class="section active">
+  <div class="section-header"><div class="section-icon">📊</div><div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">💪</div><h3>5.2% GDP Growth</h3><p>Acceleration from previous quarter. Robust services, manufacturing, and mining rebound. Trade surplus of RM50.3B. FDI surged to RM8.5B.</p><span class="win">✓ GDP forecasts revised upward</span></div>
+    <div class="card accent"><div class="ci">💰</div><h3>Investment Magnet</h3><p>FDI driven by equity inflows into services, ICT, and data-centre segments. Private consumption anchored by social-support measures and stable labour market.</p></div>
+    <div class="card green"><div class="ci">🏢</div><h3>New ED Arrives</h3><p><strong>Hannes Farlock</strong> joined as Executive Director on 15 September, succeeding Jan Noether. Junior Manager for Market Entry and 3 KAMs also onboarded.</p></div>
+  </div>
+</div>
+
+<div id="q325-services" class="section">
+  <div class="section-header"><div class="section-icon">🛂</div><div><div class="section-sub">Section C · Services</div><h2>Visa & Corporate Services</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>30 Visas + 2 Licence Apps</h3><p>New directive effective 18 Nov: companies must shorten expatriates' passes before permanent departure. Exit Clearance required within 30 days of pass expiry.</p></div>
+    <div class="card accent"><div class="ci">🔄</div><h3>PVP Realignment</h3><p>Professional Visit Pass position list realigned effective 1 September per MOHA and JIM, enhancing user experience while maintaining compliance standards.</p></div>
+  </div>
+  <div class="highlight-box"><h3>🛂 RP-T Engagement Session — 19 Nov</h3><p>With TalentCorp and Immigration Malaysia. Key updates: annual tax/salary updates required, fast-track options, RP-T system and website updates, additional subproducts (TOE, Shorten, Take up Balance).</p></div>
+</div>
+
+<div id="q325-fairs" class="section">
+  <div class="section-header"><div class="section-icon">🎪</div><div><div class="section-sub">Section C · Services</div><h2>Trade Fairs: 500 Visitors</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🏟️</div><h3>3 Major Fairs Represented</h3><p>MGCC continued to actively promote and acquire visitors and exhibitors for key German trade fairs across the region.</p></div>
+  </div>
+  <div class="ep-table"><table>
+    <thead><tr><th>Trade Fair</th><th>Visitors/Exhibitors</th></tr></thead>
+    <tbody>
+      <tr><td>IE Expo China (21–23 Apr)</td><td>356 visitors</td></tr>
+      <tr><td>transport logistic (2–5 Jun)</td><td>3 exhibitors, 76 visitors</td></tr>
+      <tr><td>automatica (24–27 Jun)</td><td>1 exhibitor, 31 visitors</td></tr>
+      <tr><td>Laser World of Photonics (24–27 Jun)</td><td>8 visitors</td></tr>
+      <tr><td>IAA Mobility (9–14 Sep)</td><td>29 visitors</td></tr>
+      <tr><td>drinktec (15–19 Sep)</td><td>1 exhibitor, 51 visitors (pending)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div id="q325-delegations" class="section">
+  <div class="section-header"><div class="section-icon">🤝</div><div><div class="section-sub">Section C · Services</div><h2>Delegations: A Blockbuster Quarter</h2></div></div>
+  <div class="timeline">
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">10–12 Sep</div><h4>🧬 NRW Biotech Delegation <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>16 delegates incl. 9 German biotech companies. NRW-Malaysia Business Forum with ~60 companies.</p><div class="t-detail">Company visits to CytoMed Therapeutics (JB), UKM, Duopharma Biotech. Country briefing, networking reception, and MIDA roundtable coordinated by MGCC.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">Jul</div><h4>🛒 4th Purchase Initiative ASEAN (B2Bs) <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>~60 B2B meetings over 3 weeks between German purchasers and Malaysian suppliers.</p><div class="t-detail">Coordinated with BME. MGCC supported all individual online B2B meetings.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">7 Jul – 1 Aug</div><h4>🇲🇾 CDC-JPA KARISMA Implementation <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>15 senior government officials attached to German companies in Malaysia.</p><div class="t-detail">Intercultural training conducted 27 Aug before officials departed for Germany. Full coordination by MGCC on behalf of CDC.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">Jul–Sep</div><h4>🌐 12+ Intercultural Trainings <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>For SCHOTT AG, CARL ZEISS AG, KAMs, and government officials.</p><div class="t-detail">Also: H2 workshops with GIZ (Sarawak Ministry, SAF focus), country briefings for University of Mainz (30 pax), University of Osnabrück (20 pax), and Steuerberaterverband Hessen.</div></div>
+  </div>
+</div>
+
+<div id="q325-vet" class="section">
+  <div class="section-header"><div class="section-icon">🎓</div><div><div class="section-sub">Section C · GDVT</div><h2>VET: 10th Anniversary Milestone</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">🎂</div><h3>GDVT Penang 10th Anniversary</h3><p>Celebrated on 30 September alongside the Worldclass Talent–TVET Engagement Session. A decade of German dual vocational training in Penang.</p><span class="win">✓ 10 years!</span></div>
+    <div class="card accent"><div class="ci">🚀</div><h3>FutureTech Academy Launch</h3><p>Brand launched by PSDC on 20 September. New positioning for the GDVT training ecosystem in Penang.</p></div>
+    <div class="card green"><div class="ci">📋</div><h3>AdA + Industriemeister Training</h3><p>11 Aug – 27 Aug 2025. Continued upskilling of trainers and supervisors within GDVT companies.</p></div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🏭 GDVT Network Session at B. Braun — 14 Aug <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Annual session hosted by B. Braun Medical Industry. Penang and KL participants. Knowledge exchange and strategic planning for GDVT growth.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🏢 15+ Companies Approached for GDVT <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Hoppecke Malaysia, Rohlig Malaysia, Gadang Works, Bosch Rexroth, Ampmech, Deutsche Technoplast, MB Automation, Reinhausen Asia Pacific, Everllence, Allied Hori, Endress+Hauser, Kulim Hi Tech Park, FMM (Selangor), and more.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">📊 Industry Outlook — 90 Participants <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Held alongside 10th Anniversary. Featured YB Jagdeep Singh Deo (Penang DCM II), H.E. Silke Riecken-Daerr (German Ambassador). Panel on talent crisis, development, and retention strategies.</div>
+  </div>
+</div>
+
+<div id="q325-chamber" class="section">
+  <div class="section-header"><div class="section-icon">🏛️</div><div><div class="section-sub">Section D · Chamber</div><h2>Chamber: Robust Activity</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📈</div><h3>Total Members: 450</h3><p>18 new members and 16 resignations (incl. office closures, overdue payments). Membership slightly down from Q2's 455.</p></div>
+    <div class="card accent"><div class="ci">🎉</div><h3>14 Events</h3><p>7 workshops (204 pax), 6 Industry Working Groups, Premium Luncheon (15 pax), New Members Coffee (22 orgs).</p></div>
+  </div>
+  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Key Events</p>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">👔 Premium Luncheon: YAM Tengku Zain (IDEAS) — 15 pax <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">14 of 30 Premium Members attended. Discussion on Malaysia's academic landscape, Negeri Sembilan's development plans, and future technology opportunities for German collaboration.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">🚗 Automotive Working Group <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Advanced discussions on Excise Duty 402 clause and NCM mechanism. Position paper submitted to Ministry of Finance.</div>
+  </div>
+  <div class="accordion">
+    <button class="acc-header" onclick="toggleAcc(this)">⚡ Energy Working Group <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Focused on carbon credit regulations, grid stability, and evolving power generation trends.</div>
+  </div>
+</div>
+
+<div id="q325-accounts" class="section">
+  <div class="section-header"><div class="section-icon">💼</div><div><div class="section-sub">Section E · Accounts</div><h2>Accounts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>19 Chargeable Clients</h3><p><strong>8 accounting</strong> and <strong>11 payroll</strong> clients. SST extended to commercial rental/leasing (8% for businesses &gt; RM1M revenue). EPF now mandatory for foreign workers (2% each).</p></div>
+  </div>
+</div>
+
+<div id="q325-hr" class="section">
+  <div class="section-header"><div class="section-icon">👥</div><div><div class="section-sub">Section F · Admin & HR</div><h2>People & Operations</h2></div></div>
+  <div class="hr-grid">
+    <div class="hr-card"><div class="big">34</div><div class="sub">Total Headcount<br>29 perm · 5 fixed-term</div></div>
+    <div class="hr-card"><div class="big">6</div><div class="sub">Interns</div></div>
+  </div>
+  <div class="card-grid">
+    <div class="card green"><div class="ci">🟢</div><h3>New Joiners</h3><p><strong>Hannes Farlock</strong> — Executive Director (15 Sep)<br><strong>Latashah Vallimanalan</strong> — Jr Manager Market Entry (10 Sep)<br><strong>Dieter Newmann</strong> — KAM Re'graph (9 Jul)<br><strong>Yarmanis Selvam</strong> — KAM Tuenkers (1 Aug)<br><strong>Sascha Cohrs</strong> — KAM Norevo (21 Aug)</p></div>
+    <div class="card accent"><div class="ci">🔴</div><h3>Leavers</h3><p><strong>Jan Noether</strong> — Executive Director, last day 31 Jul<br><strong>Aliya Syafa' Azahar</strong> — Jr Manager Delegation, last day 28 Jul</p></div>
+    <div class="card"><div class="ci">🛡️</div><h3>IT: Security Upgrades</h3><p>Sophos Intercept X Advanced for 36 PCs + 4 servers. FortiGate-40F firewall replacing end-of-support GBC firewall. AI-powered threat blocking and synchronized security.</p></div>
+  </div>
+</div>
+
+</div><!-- end Q3 2025 -->
+
+
+<!-- ============================================================ -->
+<!-- Q4 2025 -->
+<!-- ============================================================ -->
+<div id="q4-25" class="quarter-view">
+
 <div class="hero">
   <div class="tag">Q4 2025 · Oct – Dec</div>
   <h1>MGCC Executive<br><span>Director's Report</span></h1>
@@ -160,494 +1125,244 @@
   </div>
 </div>
 
-<!-- STAT STRIP -->
 <div class="stat-strip">
-  <div class="stat-item">
-    <div class="stat-tooltip">bau Munich: 39 → 94 visitors</div>
-    <div class="num">+141%</div><div class="label">bau Munich</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-tooltip">bau China: 17 → 67 visitors</div>
-    <div class="num">+294%</div><div class="label">bau China</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-tooltip">Exports +11%, Imports +12.6%</div>
-    <div class="num">+11.7%</div><div class="label">Trade Growth</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-tooltip">87% rated situation "good/satisfactory"</div>
-    <div class="num">87%</div><div class="label">Firms: Confident</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-tooltip">Across 13 events in Q4</div>
-    <div class="num">274</div><div class="label">Event Participants</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-tooltip">0 resignations this quarter</div>
-    <div class="num">7</div><div class="label">New Members</div>
-  </div>
+  <div class="stat-item"><div class="stat-tooltip">87% firms: good/satisfactory</div><div class="num">87%</div><div class="label">Firm Confidence</div></div>
+  <div class="stat-item"><div class="stat-tooltip">5.7% GDP growth for 2025</div><div class="num">5.7%</div><div class="label">GDP (Annual)</div></div>
+  <div class="stat-item"><div class="stat-tooltip">Trade grew 11.7% YoY</div><div class="num">+11.7%</div><div class="label">Trade Growth</div></div>
+  <div class="stat-item"><div class="stat-tooltip">13 events, 274 participants</div><div class="num">274</div><div class="label">Event Pax</div></div>
+  <div class="stat-item"><div class="stat-tooltip">bau Munich +141% visitors</div><div class="num">+141%</div><div class="label">bau Munich</div></div>
+  <div class="stat-item"><div class="stat-tooltip">463 total members at year-end</div><div class="num">463</div><div class="label">Members YE</div></div>
 </div>
 
-<!-- NAV -->
-<nav id="main-nav">
-  <button class="active" onclick="showSection('overview',this)">📊 Overview</button>
-  <button onclick="showSection('visa',this)">🛂 Visa</button>
-  <button onclick="showSection('fairs',this)">🎪 Trade Fairs</button>
-  <button onclick="showSection('delegations',this)">🤝 Delegations</button>
-  <button onclick="showSection('vet',this)">🎓 VET</button>
-  <button onclick="showSection('chamber',this)">🏛️ Chamber</button>
-  <button onclick="showSection('accounts',this)">💼 Accounts</button>
-  <button onclick="showSection('hr',this)">👥 HR & IT</button>
-
+<nav>
+  <button class="active" onclick="showSection('q4-25','q425-overview',this)">📊 Overview</button>
+  <button onclick="showSection('q4-25','q425-services',this)">🛂 Services</button>
+  <button onclick="showSection('q4-25','q425-fairs',this)">🎪 Trade Fairs</button>
+  <button onclick="showSection('q4-25','q425-delegations',this)">🤝 Delegations</button>
+  <button onclick="showSection('q4-25','q425-vet',this)">🎓 VET</button>
+  <button onclick="showSection('q4-25','q425-chamber',this)">🏛️ Chamber</button>
+  <button onclick="showSection('q4-25','q425-accounts',this)">💼 Accounts</button>
+  <button onclick="showSection('q4-25','q425-hr',this)">👥 HR & IT</button>
 </nav>
 
-<!-- OVERVIEW -->
-<div id="overview" class="section active">
-  <div class="section-header">
-    <div class="section-icon">📊</div>
-    <div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div>
-  </div>
+<div id="q425-overview" class="section active">
+  <div class="section-header"><div class="section-icon">📊</div><div><div class="section-sub">Section B · General Overview</div><h2>The Big Picture</h2></div></div>
   <div class="card-grid">
-    <div class="card">
-      <div class="ci">💪</div>
-      <h3>Confidence is High</h3>
-      <p>87% of German firms rated their situation as "good" or "satisfactory." 90% expect stable or favourable conditions in 2026.</p>
-      <span class="win">✓ Strong regional footing</span>
-    </div>
-    <div class="card accent">
-      <div class="ci">📦</div>
-      <h3>Trade is Booming</h3>
-      <p>Total bilateral trade grew 11.7%, exports up 11.0%, imports up 12.6%. Semiconductors and integrated circuits led the charge.</p>
-    </div>
-    <div class="card green">
-      <div class="ci">🏭</div>
-      <h3>Hiring Mode: On</h3>
-      <p>49% of German companies plan to grow their Malaysia workforce — especially in manufacturing and services.</p>
-    </div>
+    <div class="card"><div class="ci">📊</div><h3>5.7% Annual GDP</h3><p>Robust trade growth and high confidence. Total trade grew 11.7%, exports up 11.0%, imports up 12.6%. Integrated circuit exports to Germany rose 20%+ in some months.</p><span class="win">✓ Strong year</span></div>
+    <div class="card accent"><div class="ci">🏢</div><h3>AHK Business Outlook</h3><p>87% of German firms rate conditions "good/satisfactory". 90% expect stable/positive for 2026. 49% plan to increase workforce. Top risks: weak demand (67%), economic policy (42%).</p></div>
+    <div class="card green"><div class="ci">🤝</div><h3>German Delegation Visit</h3><p>Parliamentary State Secretary Stefan Rouenhoff led a German Business Delegation on 19 Nov. MGCC hosted roundtables in Penang and Kulim focused on semiconductors.</p></div>
   </div>
-
-  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Business Sentiment Indicators</p>
-  <div class="chart-wrap">
-    <div class="progress-row">
-      <div class="progress-label"><span>Rate situation as "Good/Satisfactory"</span><span>87%</span></div>
-      <div class="progress-track"><div class="progress-fill" data-w="87"></div></div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-label"><span>Expect stability in 2026</span><span>90%</span></div>
-      <div class="progress-track"><div class="progress-fill" data-w="90"></div></div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-label"><span>Planning workforce increases</span><span>49%</span></div>
-      <div class="progress-track"><div class="progress-fill accent" data-w="49"></div></div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-label"><span>Planning investment expansion</span><span>28%</span></div>
-      <div class="progress-track"><div class="progress-fill accent" data-w="28"></div></div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-label"><span>Identify weak global demand as risk</span><span>67%</span></div>
-      <div class="progress-track"><div class="progress-fill green" data-w="67"></div></div>
-    </div>
-  </div>
-
-  <div class="highlight-box">
-    <h3>⚠️ Top Business Risks for 2026</h3>
-    <p>Weak global demand <strong>(67%)</strong> · Economic policy shifts <strong>(42%)</strong> · Skilled-labour shortage <strong>(37%)</strong>. MGCC is watching — and working to address — all three.</p>
-  </div>
+  <div class="highlight-box"><h3>🏛️ MGCC Q4 Highlights</h3><p>New team members Tan Yu Ping (Delegations) and Tan Yun Teng (Market Entry) joined. <strong>SCRUM training workshop</strong> led by the ED. Staff day out with Escape Room team-building.</p></div>
 </div>
 
-<!-- VISA -->
-<div id="visa" class="section">
-  <div class="section-header">
-    <div class="section-icon">🛂</div>
-    <div><div class="section-sub">Section C · Services</div><h2>Visa: A Policy Shake-Up is Coming</h2></div>
+<div id="q425-services" class="section">
+  <div class="section-header"><div class="section-icon">🛂</div><div><div class="section-sub">Section C · Services</div><h2>Visa & Corporate Services</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>Revised Salary Policy (Effective 1 Jun 2026)</h3><p>EP Category I: RM20,000+ (from RM10,000). Category II: RM10,000–19,999. Category III: RM5,000–9,999. Structured 10-year employment duration introduced.</p></div>
   </div>
-  <p style="font-size:0.875rem;color:#555;margin-bottom:20px;">The Ministry of Home Affairs has announced a major revision to the Employment Pass salary framework effective <strong>1 June 2026</strong>, aligned with the Thirteenth Malaysia Plan's goal to prioritise local talent development.</p>
-
-  <div class="ep-table">
-    <table>
-      <thead><tr><th>EP Category</th><th>Current Minimum</th><th>New Minimum (Jun 2026)</th><th>Duration</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Category I</strong></td><td class="old">RM 10,000+</td><td class="new">RM 20,000+</td><td>Up to 10 years</td></tr>
-        <tr><td><strong>Category II</strong></td><td class="old">RM 5,000 – 9,999</td><td class="new">RM 10,000 – 19,999</td><td>Up to 10 years + succession plan</td></tr>
-        <tr><td><strong>Category III</strong></td><td class="old">RM 3,000 – 4,999</td><td class="new">RM 5,000 – 9,999</td><td>Up to 5 years + succession plan</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="highlight-box">
-    <h3>📌 What This Means for Members</h3>
-    <p>All new and renewal EP applications submitted on or after <strong>1 June 2026</strong> must comply with revised thresholds. Companies are strongly encouraged to review their workforce planning and compliance strategies now — before the deadline.</p>
-  </div>
+  <div class="ep-table"><table>
+    <thead><tr><th>EP Category</th><th>Current Min</th><th>Revised Min (Jun 2026)</th><th>Duration</th></tr></thead>
+    <tbody>
+      <tr><td>Category I</td><td>RM10,000+</td><td>RM20,000+</td><td>Up to 10 years</td></tr>
+      <tr><td>Category II</td><td>RM5,000–9,999</td><td>RM10,000–19,999</td><td>Up to 10 years (succession plan)</td></tr>
+      <tr><td>Category III</td><td>RM3,000–4,999</td><td>RM5,000–9,999</td><td>Up to 5 years (succession plan)</td></tr>
+    </tbody>
+  </table></div>
 </div>
 
-<!-- TRADE FAIRS -->
-<div id="fairs" class="section">
-  <div class="section-header">
-    <div class="section-icon">🎪</div>
-    <div><div class="section-sub">Section C · Services</div><h2>Trade Fairs: Numbers Don't Lie</h2></div>
+<div id="q425-fairs" class="section">
+  <div class="section-header"><div class="section-icon">🎪</div><div><div class="section-sub">Section C · Services</div><h2>Trade Fairs: Record Growth</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📈</div><h3>Visitor Numbers Surging</h3><p>Significant increases across German trade fairs: bau Munich +141%, transport logistic +31%, productronica +42%, IE expo China +96%.</p><span class="win">✓ Record year</span></div>
   </div>
-
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="showTab('fairs','q4',this)">Q4 Activity</button>
-    <button class="tab-btn" onclick="showTab('fairs','growth',this)">2025 Growth</button>
-    <button class="tab-btn" onclick="showTab('fairs','why',this)">Why the Surge?</button>
-  </div>
-
-  <div id="fairs-q4" class="tab-panel active">
-    <div class="chart-wrap">
-      <h3>Q4 Visitor Numbers by Fair</h3>
-      <div class="bar-row"><div class="bar-label">productronica Munich</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="100">111</div></div><div class="bar-val">111</div></div>
-      <div class="bar-row"><div class="bar-label">drinktec</div><div class="bar-track"><div class="bar-fill" style="background:#005599" data-w="46">51</div></div><div class="bar-val">51</div></div>
-      <div class="bar-row"><div class="bar-label">Glasstech Asia</div><div class="bar-track"><div class="bar-fill" style="background:#0077cc" data-w="42">47</div></div><div class="bar-val">47</div></div>
-      <div class="bar-row"><div class="bar-label">bau China</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="60">67</div></div><div class="bar-val">67</div></div>
-      <div class="bar-row"><div class="bar-label">ASEAN Ceramic & Stone</div><div class="bar-track"><div class="bar-fill" style="background:#2eab6f" data-w="14">16</div></div><div class="bar-val">16</div></div>
-      <div class="bar-row"><div class="bar-label">ISPO Munich</div><div class="bar-track"><div class="bar-fill" style="background:#7a4fcc" data-w="15">17</div></div><div class="bar-val">17</div></div>
-      <div class="bar-row"><div class="bar-label">IFAT India</div><div class="bar-track"><div class="bar-fill" style="background:#e05050" data-w="4">4</div></div><div class="bar-val">4</div></div>
-    </div>
-  </div>
-
-  <div id="fairs-growth" class="tab-panel">
-    <div class="chart-wrap">
-      <h3>Year-on-Year Visitor Growth (2025 vs Prior Year)</h3>
-      <div class="bar-row"><div class="bar-label">bau China</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="98">+294%</div></div><div class="bar-val">+294%</div></div>
-      <div class="bar-row"><div class="bar-label">bau Munich</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="48">+141%</div></div><div class="bar-val">+141%</div></div>
-      <div class="bar-row"><div class="bar-label">IE expo China</div><div class="bar-track"><div class="bar-fill" style="background:#0077cc" data-w="33">+96%</div></div><div class="bar-val">+96%</div></div>
-      <div class="bar-row"><div class="bar-label">Laser World Photonics</div><div class="bar-track"><div class="bar-fill" style="background:#7a4fcc" data-w="15">+45%</div></div><div class="bar-val">+45%</div></div>
-      <div class="bar-row"><div class="bar-label">productronica</div><div class="bar-track"><div class="bar-fill" style="background:#2eab6f" data-w="14">+42%</div></div><div class="bar-val">+42%</div></div>
-      <div class="bar-row"><div class="bar-label">Transport Logistic</div><div class="bar-track"><div class="bar-fill" style="background:#e05050" data-w="11">+31%</div></div><div class="bar-val">+31%</div></div>
-      <div class="bar-row"><div class="bar-label">IAA Mobility</div><div class="bar-track"><div class="bar-fill" style="background:#888" data-w="10">New!</div></div><div class="bar-val">0→29</div></div>
-    </div>
-  </div>
-
-  <div id="fairs-why" class="tab-panel">
-    <div class="card-grid">
-      <div class="card accent">
-        <div class="ci">🇨🇳</div>
-        <h3>Why China Fairs Surged</h3>
-        <p><strong>Visa-free travel</strong> via Malaysia-China exemption agreements removed friction. China remains Malaysia's <strong>largest trading partner</strong> for over a decade, and companies are actively sourcing cost-effective materials from Chinese suppliers to optimise supply chains.</p>
-      </div>
-      <div class="card">
-        <div class="ci">🇩🇪</div>
-        <h3>Why Germany Fairs Grew</h3>
-        <p>Germany is Malaysia's <strong>largest EU trading partner</strong>. Malaysian companies flock to German fairs to source advanced machinery, automotive components, electronics, and renewable energy technologies unavailable elsewhere.</p>
-      </div>
-    </div>
-    <div class="highlight-box" style="background:linear-gradient(135deg,#2a6e47,#1a8a55);">
-      <h3>🌟 NRW ASEAN Service Desk</h3>
-      <p>On 5 December, MGCC hosted a webinar on <em>"Unlocking Growth in Germany's Food Industry: Business Opportunities in NRW"</em> — partnering with AHK Thailand and AHK Vietnam. Nearly <strong>100 participants</strong> from Malaysia, Vietnam, Singapore, and Indonesia joined.</p>
-    </div>
-  </div>
+  <div class="ep-table"><table>
+    <thead><tr><th>Trade Fair</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td>drinktec (15–19 Sep)</td><td>1 exhibitor, 51 visitors</td></tr>
+      <tr><td>IFAT India (14–16 Oct)</td><td>4 visitors</td></tr>
+      <tr><td>ASEAN Ceramic & Stone, Bangkok (15–17 Oct)</td><td>1 exhibitor, 16 visitors</td></tr>
+      <tr><td>productronica China (5–8 Nov)</td><td>67 visitors</td></tr>
+      <tr><td>Glasstech Asia, Indonesia (6–9 Nov)</td><td>2 exhibitors, 47 visitors</td></tr>
+    </tbody>
+  </table></div>
+  <div class="highlight-box"><h3>🌐 NRW Food Industry Webinar — 5 Dec</h3><p>"Unlocking Growth in Germany's Food Industry: Business Opportunities in NRW". Partnered with AHK Thailand and AHK Vietnam. <strong>~100 participants</strong> from Malaysia, Vietnam, Singapore, and Indonesia.</p></div>
 </div>
 
-<!-- DELEGATIONS -->
-<div id="delegations" class="section">
-  <div class="section-header">
-    <div class="section-icon">🤝</div>
-    <div><div class="section-sub">Section C · Services</div><h2>Delegations & Projects</h2></div>
-  </div>
-  <p style="font-size:0.875rem;color:#555;margin-bottom:22px;">Click any event to expand the full story.</p>
-
+<div id="q425-delegations" class="section">
+  <div class="section-header"><div class="section-icon">🤝</div><div><div class="section-sub">Section C · Services</div><h2>Delegations & Projects</h2></div></div>
   <div class="timeline">
-    <div class="t-item" onclick="toggleTimeline(this)">
-      <div class="t-date">17 October</div>
-      <h4>🏦 Sparkassen Delegation &nbsp;<span style="font-size:0.72rem;color:var(--accent);">tap to expand ▾</span></h4>
-      <p>German banking delegation — MGCC presented Malaysia's economic outlook.</p>
-      <div class="t-detail">MGCC's Delegations Team was invited to present on the economic situation in Malaysia and MGCC's activities at the Country Briefing for this banker's delegation organised by the Sparkassen group.</div>
-    </div>
-    <div class="t-item" onclick="toggleTimeline(this)">
-      <div class="t-date">27–30 October</div>
-      <h4>⚙️ MEP I4.0 Delegation &nbsp;<span style="font-size:0.72rem;color:var(--accent);">tap to expand ▾</span></h4>
-      <p>7 German I4.0 solution providers met Malaysian industry and authorities.</p>
-      <div class="t-detail">Under the Market Entry Program (MEP) supported by BMWE, MGCC coordinated with partner AMENA Trade & Investing Consulting GmbH to bring 7 German solution providers to Malaysia, focusing on I4.0 and Supply Chain Logistics. Activities included a full-day conference, individual B2B meetings, factory/site visits, and a roundtable with Malaysian authorities and agencies.</div>
-    </div>
-    <div class="t-item" onclick="toggleTimeline(this)">
-      <div class="t-date">5–7 November</div>
-      <h4>🏢 IHK Osnabrück Delegation &nbsp;<span style="font-size:0.72rem;color:var(--accent);">tap to expand ▾</span></h4>
-      <p>8 German companies explored Malaysia's market and business opportunities.</p>
-      <div class="t-detail">Led by IHK Osnabrück, 8 German companies participated to explore Malaysian market potential. The programme included a country briefing and company visits to a German manufacturing company in Malaysia, the AI Experience Centre, and GMI — all coordinated by MGCC.</div>
-    </div>
-    <div class="t-item" onclick="toggleTimeline(this)">
-      <div class="t-date">7 November</div>
-      <h4>🎓 GCAP Closing Ceremony &nbsp;<span style="font-size:0.72rem;color:var(--accent);">tap to expand ▾</span></h4>
-      <p>MGCC officiated the closing of the German Companies Attachment Program.</p>
-      <div class="t-detail">An appreciation dinner and prize-giving ceremony for all participants — government officials and German companies who hosted the attachment program. MGCC was honoured to participate as a VIP at the closing ceremony.</div>
-    </div>
-    <div class="t-item" onclick="toggleTimeline(this)">
-      <div class="t-date">2 December</div>
-      <h4>🛒 5th Purchase Initiative ASEAN 2026 Kick-Off &nbsp;<span style="font-size:0.72rem;color:var(--accent);">tap to expand ▾</span></h4>
-      <p>Another successful year — now entering its 5th edition in 2026.</p>
-      <div class="t-detail">Building on great success from previous years, the Purchase Initiative continues into 2026. The kick-off event officially started the program and set dates for multiple events planned throughout 2026.</div>
-    </div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">17 Oct</div><h4>🏦 Sparkassen Delegation <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Banker's delegation; MGCC presented on Malaysia's economic situation and Chamber activities.</p><div class="t-detail">Organised by the Sparkassen group. MGCC Delegations Team presented at the Country Briefing in Kuala Lumpur.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">27–30 Oct</div><h4>⚙️ MEP I4.0 Delegation <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>7 German solution providers — conference, B2Bs, site visits, authority roundtable.</p><div class="t-detail">Focus on Supply Chain Logistics under BMWE Market Entry Program. Coordinated with AMENA Trade & Investing Consulting GmbH.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">5–7 Nov</div><h4>🇩🇪 IHK Osnabrück Delegation <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>8 German companies exploring Malaysian market. Country briefing, company visits, and conversations at GMI.</p><div class="t-detail">Included visits to a German manufacturing company in Malaysia and an AI Experience Centre.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">7 Nov</div><h4>🎓 GCAP Closing Ceremony <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Appreciation dinner and prize-giving for the German Companies Attachment Program participants.</p><div class="t-detail">MGCC invited as VIP to officiate the closing ceremony for all government officials and participating German companies.</div></div>
+    <div class="t-item" onclick="toggleTimeline(this)"><div class="t-date">2 Dec</div><h4>🛒 5th Purchase Initiative ASEAN 2026 Kick-off <span style="font-size:0.72rem;color:var(--accent);">tap ▾</span></h4><p>Continuing the highly successful Purchase Initiative series into 2026.</p><div class="t-detail">Kick-off event set dates for multiple events under this project in 2026.</div></div>
   </div>
 </div>
 
-<!-- VET -->
-<div id="vet" class="section">
-  <div class="section-header">
-    <div class="section-icon">🎓</div>
-    <div><div class="section-sub">Section C · Services</div><h2>VET: Building Tomorrow's Workforce</h2></div>
-  </div>
+<div id="q425-vet" class="section">
+  <div class="section-header"><div class="section-icon">🎓</div><div><div class="section-sub">Section C · GDVT</div><h2>VET: Regional Engagement</h2></div></div>
   <div class="card-grid">
-    <div class="card">
-      <div class="ci">🔧</div>
-      <h3>Mechatronics Examiner Workshop</h3>
-      <p>9 October (online) — keeping Malaysia's vocational training standards sharp and globally aligned with German benchmarks.</p>
-    </div>
-    <div class="card accent">
-      <div class="ci">🌏</div>
-      <h3>Regional VET Meeting — Shanghai</h3>
-      <p>11 November: explored AHK Greater China's structure and strategy, VET best practices, and new collaboration opportunities across the region.</p>
-    </div>
-    <div class="card green">
-      <div class="ci">🏗️</div>
-      <h3>New Company Approaches</h3>
-      <p>Fresh outreach to Greatech Group, Schaeffler Malaysia (Penang), Balluff Automation, ENGIE Services, Engtek Group, and Kulim Hi Tech Park.</p>
-    </div>
-  </div>
-
-  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:24px 0 12px;">Q4 VET Activity Log</p>
-
-  <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🏙️ Penang LRT Town Hall — 2 Oct <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">Town Hall Session on the Penang LRT Mutiara Line Project organised by InvestPenang. MGCC participated to stay abreast of major infrastructure developments relevant to industry and training partners.</div>
+    <div class="card"><div class="ci">🌏</div><h3>AHK VET Regional Meeting — Shanghai</h3><p>11 November. Highlighted AHK Greater China's structure, current VET solutions, best practices, and latest developments in Germany.</p></div>
+    <div class="card accent"><div class="ci">🔧</div><h3>Mechatronics Examiner Workshop</h3><p>9 October (online). Continued quality assurance of GDVT examination processes.</p></div>
+    <div class="card green"><div class="ci">🏢</div><h3>New Company Approaches</h3><p>Greatech Group, Kulim Hi Tech Park, Engtek Group, Schaeffler Malaysia (Penang), Balluff Automation, ENGIE Services Malaysia.</p></div>
   </div>
   <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🔩 GDVT Mechatronics Examiner Workshop — 9 Oct <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">Online workshop for Mechatronics Examiners under the GDVT (German Dual Vocational Training) framework — ensuring assessors maintain the rigour and standards of German vocational qualifications.</div>
+    <button class="acc-header" onclick="toggleAcc(this)">🇩🇪 German Federal Vice Minister Visit — 19 Nov <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Parliamentary State Secretary Stefan Rouenhoff visited Malaysia. MGCC hosted roundtable discussions in Penang focused on semiconductor sector with Infineon and others.</div>
   </div>
   <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🏭 German Business Delegation Visit — 19 Nov <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">Led by Parliamentary State Secretary Mr. Stefan Rouenhoff, the delegation focused on Malaysia's semiconductor sector. MGCC hosted roundtable discussions in Penang and Kulim with key players including Infineon.</div>
-  </div>
-  <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🎯 Global Skills Forum 2025 — 22–23 Oct <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">MGCC participated in the Global Skills Forum 2025 and Gala Dinner — a platform for exchange on skills development, workforce training, and future-of-work strategies at the international level.</div>
-  </div>
-  <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🏥 Technical Skill Learning @ B. Braun — 12 Dec <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">Technical Skill Learning Programme hosted at B. Braun — an example of industry-driven vocational training in action, deepening ties between MGCC's VET efforts and the healthcare manufacturing sector.</div>
+    <button class="acc-header" onclick="toggleAcc(this)">📚 Additional Activities <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Global Skills Forum 2025 & Gala Dinner (22–23 Oct). Reinhausen Academy visit (12 Dec). Technical Skill Learning Programme at B. Braun (12 Dec). ADI Induction (12 Nov). Kulim Hi Tech Park training (3 Dec).</div>
   </div>
 </div>
 
-<!-- CHAMBER -->
-<div id="chamber" class="section">
-  <div class="section-header">
-    <div class="section-icon">🏛️</div>
-    <div><div class="section-sub">Section D · Chamber</div><h2>Chamber: Growing Strong</h2></div>
-  </div>
-
+<div id="q425-chamber" class="section">
+  <div class="section-header"><div class="section-icon">🏛️</div><div><div class="section-sub">Section D · Chamber</div><h2>Chamber: Strong Year-End</h2></div></div>
   <div class="card-grid">
-    <div class="card">
-      <div class="ci">📈</div>
-      <h3>Total Members: 463</h3>
-      <p>7 new members joined in Q4. Zero resignations. Pure growth.</p>
-      <span class="win">✓ Net +7 this quarter</span>
-    </div>
-    <div class="card accent">
-      <div class="ci">🎉</div>
-      <h3>13 Events · 274 Participants</h3>
-      <p>1 Premium, 7 workshops, 3 IWG roundtables, 1 delegation visit, 1 Jingle & Mingle.</p>
-    </div>
+    <div class="card"><div class="ci">📈</div><h3>Total Members: 463</h3><p>7 new members (incl. 2 Premium) and 0 resignations in Q4. Strong year-end growth from 461 at Q1 start.</p><span class="win">✓ Net +2 for 2025</span></div>
+    <div class="card accent"><div class="ci">🎉</div><h3>13 Events · 274 Participants</h3><p>7 workshops (142 pax), 3 Industry Working Groups, Premium Luncheon with MITI Deputy Minister (30 pax), German Delegation roundtable, Jingle & Mingle (100 pax).</p></div>
   </div>
-
-  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:4px 0 12px;">Q4 New Members</p>
+  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:4px 0 12px;">New Members</p>
   <div>
     <span class="member-chip premium">⭐ Leighton Contractors Malaysia</span>
     <span class="member-chip premium">⭐ Di PURBA International</span>
-    <span class="member-chip">Possehl Electronics (Malaysia)</span>
-    <span class="member-chip">Terra Asia Global Business Support</span>
+    <span class="member-chip">Possehl Electronics Malaysia</span>
+    <span class="member-chip">Terra Asia Global Business</span>
     <span class="member-chip">TASC International Malaysia</span>
     <span class="member-chip">JP Contagi Asia</span>
     <span class="member-chip">Hap Seng Consolidated</span>
   </div>
-
-  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:28px 0 12px;">Event Highlights</p>
-
+  <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Key Events</p>
   <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🍽️ 4th Premium Member Luncheon with Deputy Minister of MITI <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">30 distinguished guests — including 28 of our 30 Premium Members — engaged in a candid dialogue with YB Liew Chin Tong, Deputy Minister of MITI. Discussions covered Malaysia's industrial direction, investment priorities, and German-Malaysian collaboration pathways.</div>
+    <button class="acc-header" onclick="toggleAcc(this)">👔 4th Premium Luncheon: MITI Deputy Minister (30 pax) <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">28 of 30 Premium Members attended. Strategic dialogue with YB Liew Chin Tong on Malaysia's industrial direction, investment priorities, and strengthening German-Malaysian collaboration.</div>
   </div>
   <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🧰 7 Functional Workshops — 142 Participants <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">High-impact topics included <em>Malaysia Budget 2026: Post-Budget Tax Analysis</em> and <em>How Are We Staying Smarter than AI?</em> — addressing both fiscal clarity and digital transformation for our members.</div>
+    <button class="acc-header" onclick="toggleAcc(this)">🚗 Automotive WG: Position Paper to EU Delegation <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Advanced discussions on sector challenges. Position paper submitted to the EU Delegation. Introductory meeting with B. Braun for potential Healthcare Industry Working Group.</div>
   </div>
   <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🔬 Industry Working Groups — 3 Roundtables <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">The Automotive Working Group advanced a position paper for the EU Delegation. An introductory meeting with B. Braun marked the first step toward a new dedicated <strong>Healthcare Industry Working Group</strong>.</div>
-  </div>
-  <div class="accordion">
-    <button class="acc-header" onclick="toggleAcc(this)">🎄 Annual Jingle and Mingle — 100 Participants <span class="acc-arrow">▼</span></button>
-    <div class="acc-body">The perfect note to end the year on. 100 members and partners gathered to reconnect, celebrate the year's achievements, and enjoy the festive season together.</div>
+    <button class="acc-header" onclick="toggleAcc(this)">🎄 Annual Jingle & Mingle — 100 Participants <span class="acc-arrow">▼</span></button>
+    <div class="acc-body">Year-end celebration. Excellent platform for members and partners to reconnect, strengthen relationships, and celebrate the year's achievements.</div>
   </div>
 </div>
 
-<!-- ACCOUNTS -->
-<div id="accounts" class="section">
-  <div class="section-header">
-    <div class="section-icon">💼</div>
-    <div><div class="section-sub">Section E · Accounts</div><h2>Accounts: Adapting & Delivering</h2></div>
+<div id="q425-accounts" class="section">
+  <div class="section-header"><div class="section-icon">💼</div><div><div class="section-sub">Section E · Accounts</div><h2>Accounts</h2></div></div>
+  <div class="card-grid">
+    <div class="card"><div class="ci">📋</div><h3>19 Chargeable Clients</h3><p><strong>8 accounting</strong> and <strong>11 payroll</strong> clients. Mandatory EPF contributions for foreign employees (2% employer + 2% employee) implemented effective October 2025.</p></div>
+  </div>
+</div>
+
+<div id="q425-hr" class="section">
+  <div class="section-header"><div class="section-icon">👥</div><div><div class="section-sub">Section F · Admin & HR</div><h2>People & Operations</h2></div></div>
+  <div class="hr-grid">
+    <div class="hr-card"><div class="big">35</div><div class="sub">Total Headcount<br>30 perm · 5 fixed-term</div></div>
+    <div class="hr-card"><div class="big">6</div><div class="sub">1-Year Service Awards</div></div>
+    <div class="hr-card"><div class="big">5</div><div class="sub">15-Year Service Awards</div></div>
   </div>
   <div class="card-grid">
-    <div class="card">
-      <div class="ci">📋</div>
-      <h3>Client Portfolio — Q4 2025</h3>
-      <p><strong>8 accounting clients</strong> and <strong>11 payroll clients</strong> managed. A slight dip from Q4 2024 (9 accounting, 13 payroll), but service delivery remained fully on point.</p>
-    </div>
-    <div class="card accent">
-      <div class="ci">📌</div>
-      <h3>EPF Compliance: Done ✓</h3>
-      <p>Mandatory 2% EPF contributions for foreign employees (employer + employee), effective October 2025, fully implemented across all payroll operations with zero disruption.</p>
-    </div>
+    <div class="card green"><div class="ci">🟢</div><h3>New Joiners</h3><p><strong>Tan Yu Ping</strong> — Jr Manager Delegations (13 Oct)<br><strong>Tan Yun Teng</strong> — Manager Market Entry (17 Oct)</p></div>
+    <div class="card accent"><div class="ci">🔴</div><h3>Leaver</h3><p><strong>Yii Sii Jing</strong> — Manager Market Entry, last day 4 Nov</p></div>
+    <div class="card"><div class="ci">🛡️</div><h3>IT: License Renewals</h3><p>M365 Business Basic & E3 renewed (28 Dec). Hornetsecurity ATP renewed (14 Dec). Veeam Data Platform renewed (21 Dec). Monthly Windows updates addressed 270+ vulnerabilities.</p></div>
   </div>
-  <div class="chart-wrap">
-    <h3>Client Volume: Q4 2024 vs Q4 2025</h3>
-    <div class="bar-row"><div class="bar-label">Accounting — 2024</div><div class="bar-track"><div class="bar-fill" style="background:#aaa" data-w="90">9</div></div><div class="bar-val">9</div></div>
-    <div class="bar-row"><div class="bar-label">Accounting — 2025</div><div class="bar-track"><div class="bar-fill" style="background:#003366" data-w="80">8</div></div><div class="bar-val">8</div></div>
-    <div class="bar-row"><div class="bar-label">Payroll — 2024</div><div class="bar-track"><div class="bar-fill" style="background:#ccc" data-w="100">13</div></div><div class="bar-val">13</div></div>
-    <div class="bar-row"><div class="bar-label">Payroll — 2025</div><div class="bar-track"><div class="bar-fill" style="background:#E8A020" data-w="85">11</div></div><div class="bar-val">11</div></div>
-  </div>
+  <div class="highlight-box"><h3>🎮 Team Building</h3><p>SCRUM training workshop led by the ED followed by Escape Room team-building activity. Also welcomed a colleague from <strong>IHK Cuxhaven</strong> for a one-week exchange programme.</p></div>
 </div>
 
-<!-- HR & IT -->
-<div id="hr" class="section">
-  <div class="section-header">
-    <div class="section-icon">👥</div>
-    <div><div class="section-sub">Section F · Admin & HR</div><h2>People & Operations</h2></div>
-  </div>
+</div><!-- end Q4 2025 -->
 
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="showTab('hr','people',this)">People</button>
-    <button class="tab-btn" onclick="showTab('hr','it',this)">IT & Security</button>
-    <button class="tab-btn" onclick="showTab('hr','team',this)">Team Building</button>
-  </div>
-
-  <div id="hr-people" class="tab-panel active">
-    <div class="hr-grid">
-      <div class="hr-card"><div class="big">35</div><div class="sub">Total Headcount<br>30 permanent · 5 fixed-term</div></div>
-      <div class="hr-card"><div class="big">6</div><div class="sub">1-Year Service<br>Award Recipients 🏅</div></div>
-      <div class="hr-card"><div class="big">5</div><div class="sub">15-Year Service<br>Award Recipients 🎖️</div></div>
-      <div class="hr-card"><div class="big">2</div><div class="sub">New Joiners<br>in Q4</div></div>
-    </div>
-    <div class="card-grid">
-      <div class="card green">
-        <div class="ci">🟢</div>
-        <h3>New Joiners</h3>
-        <p><strong>Tan Yu Ping</strong> — Junior Manager, Delegations (13 Oct 2025)<br><strong>Tan Yun Teng</strong> — Manager, Market Entry (17 Oct 2025)</p>
-      </div>
-      <div class="card accent">
-        <div class="ci">🔴</div>
-        <h3>Leaver</h3>
-        <p><strong>Yii Sii Jing</strong> resigned as Manager, Market Entry. Last day: 4 November 2025. We wish her well in her next chapter.</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="hr-it" class="tab-panel">
-    <div class="card-grid">
-      <div class="card">
-        <div class="ci">🛡️</div>
-        <h3>270+ Vulnerabilities Patched</h3>
-        <p>Windows 11 & Server monthly security updates: 170+ vulnerabilities in October (incl. zero-days), 50+ each in November and December.</p>
-      </div>
-      <div class="card accent">
-        <div class="ci">🤖</div>
-        <h3>Microsoft Teams — Upgraded</h3>
-        <p>AI-powered Copilot for meeting summaries, enhanced chat organisation, pop-out multitasking windows, and strengthened private team access controls.</p>
-      </div>
-    </div>
-    <p style="font-size:0.85rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 12px;">Software Renewals Completed</p>
-    <div class="accordion">
-      <button class="acc-header" onclick="toggleAcc(this)">📧 Microsoft 365 Business Basic — renewed 28 Dec 2025 <span class="acc-arrow">▼</span></button>
-      <div class="acc-body">Ensures continued access to cloud-based email, collaboration, and productivity services for the MGCC team.</div>
-    </div>
-    <div class="accordion">
-      <button class="acc-header" onclick="toggleAcc(this)">💻 Microsoft 365 E3 + Teams (SV-8) — renewed 28 Dec 2025 <span class="acc-arrow">▼</span></button>
-      <div class="acc-body">Maintains access to advanced enterprise productivity, compliance, and communication capabilities.</div>
-    </div>
-    <div class="accordion">
-      <button class="acc-header" onclick="toggleAcc(this)">🔒 Hornetsecurity ATP (SV-8) — Dec 2025 to Dec 2026 <span class="acc-arrow">▼</span></button>
-      <div class="acc-body">Comprehensive email security: premium spam filtering, dual antivirus, DoS protection, cloud sandboxing, advanced malware & spear-phishing detection, URL scanning, fraud forensics, and 24/7 monitoring under malaysia.ahk.de.</div>
-    </div>
-    <div class="accordion">
-      <button class="acc-header" onclick="toggleAcc(this)">💾 Veeam Data Platform Essentials (SV-8) — Dec 2025 to Dec 2026 <span class="acc-arrow">▼</span></button>
-      <div class="acc-body">10-license renewal with Enterprise Plus Edition features and 24/7 production support — safeguarding all MGCC data backups and recovery capabilities.</div>
-    </div>
-  </div>
-
-  <div id="hr-team" class="tab-panel">
-    <div class="highlight-box" style="background:linear-gradient(135deg,#2a6e47,#1a8a55);">
-      <h3>🎉 Staff Day Out — The Grand Finale of 2025</h3>
-      <p>Organised by the Chamberinas, the day kicked off with a <strong>SCRUM training workshop</strong> led by the Executive Director — giving the team valuable agile project management skills. After a team lunch, everyone headed to the <strong>Escape Room</strong> where they raced against the clock to crack clues and escape. Everyone made it out. (We think.)</p>
-    </div>
-    <div class="card-grid" style="margin-top:20px;">
-      <div class="card">
-        <div class="ci">📚</div>
-        <h3>IHK Cuxhaven Exchange</h3>
-        <p>A colleague from IHK Cuxhaven joined MGCC for a one-week exchange visit — strengthening ties within the global AHK network.</p>
-      </div>
-      <div class="card accent">
-        <div class="ci">🎒</div>
-        <h3>Internship</h3>
-        <p>One intern joined the Services Department in Q4, contributing to MGCC's operational activities and gaining hands-on chamber experience.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
+</div><!-- end 2025 -->
 
 
 <footer>
   <strong>Malaysian-German Chamber of Commerce and Industry (MGCC)</strong><br>
-  Executive Director's Report · Q4 2025 (Oct – Dec) · Board Meeting, Kuala Lumpur, 19 March 2026
+  Executive Director's Reports · 2024 & 2025 (Q1–Q4) · Board of Directors
 </footer>
 
 <script>
-// NAV
-function showSection(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+// YEAR SWITCHING
+function showYear(id, btn) {
+  document.querySelectorAll('.year-view').forEach(y => y.classList.remove('active'));
+  document.querySelectorAll('.y-selector button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  animateBars();
+  // Reset to first quarter in that year
+  const yv = document.getElementById(id);
+  const qSelector = yv.querySelector('.q-selector');
+  const qBtns = qSelector.querySelectorAll('button');
+  yv.querySelectorAll('.quarter-view').forEach(q => q.classList.remove('active'));
+  qBtns.forEach(b => b.classList.remove('active'));
+  const firstQ = yv.querySelector('.quarter-view');
+  if (firstQ) firstQ.classList.add('active');
+  if (qBtns[0]) qBtns[0].classList.add('active');
+  // Reset to first section in that quarter
+  if (firstQ) {
+    firstQ.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    firstQ.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    const fs = firstQ.querySelector('.section');
+    const fb = firstQ.querySelector('nav button');
+    if (fs) fs.classList.add('active');
+    if (fb) fb.classList.add('active');
+  }
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  setTimeout(animateBars, 100);
 }
 
-// TABS
-function showTab(group, id, btn) {
-  const section = btn.closest('.section');
-  section.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(group + '-' + id).classList.add('active');
+// QUARTER SWITCHING
+function showQuarter(id, selectorId, btn) {
+  const yearView = btn.closest('.year-view');
+  yearView.querySelectorAll('.quarter-view').forEach(q => q.classList.remove('active'));
+  const selector = document.getElementById(selectorId);
+  selector.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  setTimeout(animateBars, 50);
+  // Reset to first section
+  const qv = document.getElementById(id);
+  qv.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  qv.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  const firstSection = qv.querySelector('.section');
+  const firstNavBtn = qv.querySelector('nav button');
+  if (firstSection) firstSection.classList.add('active');
+  if (firstNavBtn) firstNavBtn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  setTimeout(animateBars, 100);
+}
+
+// SECTION NAV
+function showSection(qId, sectionId, btn) {
+  const qv = document.getElementById(qId);
+  qv.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  qv.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+  btn.classList.add('active');
+  animateBars();
 }
 
 // ACCORDION
 function toggleAcc(btn) {
   const body = btn.nextElementSibling;
   const isOpen = body.classList.contains('open');
-  btn.closest('.section').querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'));
-  btn.closest('.section').querySelectorAll('.acc-header').forEach(b => b.classList.remove('open'));
+  const section = btn.closest('.section');
+  section.querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'));
+  section.querySelectorAll('.acc-header').forEach(b => b.classList.remove('open'));
   if (!isOpen) { body.classList.add('open'); btn.classList.add('open'); }
 }
 
 // TIMELINE
 function toggleTimeline(el) {
-  const detail = el.querySelector('.t-detail');
   const isOpen = el.classList.contains('open');
-  document.querySelectorAll('.t-item').forEach(t => { t.classList.remove('open'); });
+  document.querySelectorAll('.t-item').forEach(t => t.classList.remove('open'));
   if (!isOpen) el.classList.add('open');
 }
 
 // BARS
 function animateBars() {
-  document.querySelectorAll('.section.active .bar-fill, .section.active .progress-fill').forEach(el => {
+  document.querySelectorAll('.year-view.active .quarter-view.active .section.active .bar-fill, .year-view.active .quarter-view.active .section.active .progress-fill').forEach(el => {
     const w = el.dataset.w || 0;
     el.style.width = '0';
     requestAnimationFrame(() => requestAnimationFrame(() => { el.style.width = w + '%'; }));
   });
 }
-
 
 setTimeout(animateBars, 100);
 </script>
